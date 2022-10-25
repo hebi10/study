@@ -1,0 +1,141 @@
+이번 레슨에서는 Styled Components에서 지원하는 Nesting이라는 문법을 배워보겠습니다. Nesting은 CSS 규칙 안에서 CSS 규칙을 만드는 걸 말하는데요. Nesting을 활용하는 두 가지 방법인 & 선택자와 컴포넌트 선택자에 대해 알아보겠습니다.
+
+& 선택자
+& 선택자를 사용해서 앞에서 만든 버튼 컴포넌트를 호버하거나 클릭했을 때 배경색이 바뀌도록 해볼게요.
+
+
+4-1
+
+
+src/Button.js
+
+import styled from 'styled-components';
+
+const Button = styled.button`
+  background-color: #6750a4;
+  border: none;
+  color: #ffffff;
+  padding: 16px;
+
+  &:hover,
+  &:active {
+    background-color: #463770;
+  }
+`;
+
+export default Button;
+
+
+Nesting에서 &는 부모 선택자를 의미합니다. 위 코드에서는 버튼 컴포넌트의 클래스를 뜻하는 건데요. 기존 CSS 코드로 표현해 본다면, 버튼 컴포넌트가 .Button이라는 클래스 이름을 쓸 때 &:hover는 .Button:hover와 같은 의미입니다. 어렵지 않죠?
+
+.Button {
+  background-color: #6750a4;
+  border: none;
+  color: #ffffff;
+  padding: 16px;
+}
+
+.Button:hover,
+.Button:active {
+  background-color: #463770;
+}
+컴포넌트 선택자
+Styled Components에선 클래스 이름을 쓰지 않는데요. 그럼 컴포넌트 안에 있는 또 다른 컴포넌트를 선택하고 싶으면 어떻게 해야 할까요?
+
+버튼 안에 아이콘을 배치하는 상황으로 예를 들어볼게요. 버튼 텍스트 왼쪽에 아이콘을 배치하고 그 사이에 마진을 4px만큼 주려고 합니다. 아래 이미지처럼요.
+
+4-2
+
+
+Styled Components로 Icon과 StyledButton 컴포넌트를 각각 만들고, StyeldButton 안에 Icon을 배치할 건데요. 이때 StyledButton 컴포넌트 안에서 Icon 컴포넌트를 선택해 별도로 margin-right: 4px라는 속성을 지정하려고 합니다.
+
+이럴 경우, 컴포넌트를 선택자로 쓰고 싶을 때는 ${Icon}같이 컴포넌트 자체를 템플릿 리터럴 안에 넣어주면 됩니다.
+
+import styled from 'styled-components';
+import nailImg from './nail.png';
+
+const Icon = styled.img`
+  width: 16px;
+  height: 16px;
+`;
+
+const StyledButton = styled.button`
+  background-color: #6750a4;
+  border: none;
+  color: #ffffff;
+  padding: 16px;
+
+  & ${Icon} {
+    margin-right: 4px;
+  }
+
+  &:hover,
+  &:active {
+    background-color: #463770;
+  }
+`;
+
+function Button({ children, ...buttonProps }) {
+  return (
+    <StyledButton {...buttonProps}>
+      <Icon src={nailImg} alt="nail icon" />
+      {children}
+    </StyledButton>
+  );
+}
+
+export default Button;
+
+
+자손 결합자(Descendant Combinator)로 쓴 & ${Icon} { ... } 부분을 기존 CSS로 표현해 본다면 아래처럼 나타낼 수 있습니다. 버튼 안에 있는 태그 중에 Icon 컴포넌트에 해당하는 태그를 찾아서 스타일을 적용하는 거죠.
+
+.StyledButton {
+  ...
+}
+
+.StyledButton .Icon {
+  margin-right: 4px;
+}
+
+
+특히, &와 자손 결합자를 사용하는 경우에는 &를 생략할 수 있습니다. 즉 ${Icon}만 써도 똑같이 동작합니다. 보통 간편하게 많이 쓰니까, 자손 결합자로 Nesting 할 때는 아래처럼 쓰는 걸 권장합니다.
+
+ const StyledButton = styled.button`
+  background-color: #6750a4;
+  border: none;
+  color: #ffffff;
+  padding: 16px;
+
+  ${Icon} {
+    margin-right: 4px;
+  }
+
+  &:hover,
+  &:active {
+    background-color: #463770;
+  }
+`;
+
+
+참고로 Nesting은 여러 겹으로 할 수도 있는데요. 예를 들어서 아래 코드처럼 Nesting된 규칙 안에서 규칙을 만들 수도 있습니다.
+
+const StyledButton = styled.button`
+  ...
+  &:hover,
+  &:active {
+    background-color: #7760b4;
+
+    ${Icon} {
+      opacity: 0.2;
+    }
+  }
+`;
+4-3
+
+
+&:hover, &:active { ... } 안에 있는 ${Icon} 선택자를 CSS 코드로 표현해 보면 아래와 같습니다.
+
+.StyledButton:hover .Icon,
+.StyledButton:active .Icon {
+  opacity: 0.5;
+}

@@ -1,0 +1,125 @@
+이번에는 크기를 조절하는 size, 둥근 모양을 지정하는 round라는 Prop을 추가해 버튼 컴포넌트의 크기와 모양을 조절하는 예시를 만들어 볼게요. 그 과정을 통해 다이나믹한 스타일링을 하는 법에 대해 알아보도록 하겠습니다. 우선 완성된 코드부터 봅시다.
+
+src/Button.js
+
+import styled from 'styled-components';
+
+const SIZES = {
+  large: 24,
+  medium: 20,
+  small: 16,
+};
+
+const Button = styled.button`
+  background-color: #6750a4;
+  border: none;
+  border-radius: ${({ round }) => round ? `9999px` : `3px`};
+  color: #ffffff;
+  font-size: ${({ size }) => SIZES[size] ?? SIZES['medium']}px;
+  padding: 16px;
+
+  &:hover,
+  &:active {
+    background-color: #463770;
+  }
+`;
+
+export default Button;
+src/App.js
+
+import styled from 'styled-components';
+import Button from './Button';
+
+const Container = styled.div`
+  ${Button} {
+    margin: 10px;
+  }
+`;
+
+function App() {
+  return (
+    <Container>
+      <h1>기본 버튼</h1>
+      <Button size="small">small</Button>
+      <Button size="medium">medium</Button>
+      <Button size="large">large</Button>
+      <h1>둥근 버튼</h1>
+      <Button size="small" round>
+        round small
+      </Button>
+      <Button size="medium" round>
+        round medium
+      </Button>
+      <Button size="large" round>
+        round large
+      </Button>
+    </Container>
+  );
+}
+
+export default App;
+7-1
+
+
+앞에서 잠깐 살펴봤지만, 템플릿 리터럴 안에는 달러와 중괄호(${ ... })를 사용해서 JavaScript 코드를 집어넣을 수 있습니다. 이런 걸 표현식 삽입법(Expression Interpolation)이라고 부르는데요. 표현식 삽입법을 사용하면 Styled Components에서 Prop에 따라 컴포넌트의 스타일을 다르게 보여줄 수 있습니다. JSX에서 Prop이나 State에 따라 HTML 태그를 다르게 보여주는 것과 비슷하죠. 코드를 좀 더 자세히 살펴보면서 설명드릴게요.
+
+${ ... } 안에 값(변수) 사용하기
+가장 기본적인 사용법은 JavaScript 변수를 그대로 넣는 방식입니다. 아래 예시처럼 우리가 평소에 템플릿 문자열을 만들 때 사용하는 방식이라고 생각하시면 됩니다.
+
+const a = 1;
+const b = 2;
+const str = `${a} 더하기 ${b}는 ${a + b} 입니다.`;
+
+
+아래 예시 코드에서 ${SIZES['medium']} 부분은 숫자 20을 뜻하기 때문에, font-size: ${SIZES['medium']}px;는 font-size: 20px;란 코드가 됩니다.
+
+const SIZES = {
+  large: 24,
+  medium: 20,
+  small: 16
+};
+
+const Button = styled.button`
+  ...
+  font-size: ${SIZES['medium']}px;
+`;
+${ ... } 안에 함수 사용하기
+다음으로, Prop에 따라 스타일을 다르게 적용하는 함수를 넣으려고 하는데요. 함수의 파라미터로는 Props를 받고, 리턴 값으로는 스타일 코드를 리턴하면 됩니다. 참고로 이건 템플릿 리터럴의 기능이 아니라 Styled Components가 내부적으로 처리해 주는 겁니다.
+
+const SIZES = {
+  large: 24,
+  medium: 20,
+  small: 16
+};
+
+const Button = styled.button`
+  ...
+  font-size: ${(props) => SIZES[props.size]}px;
+`;
+
+
+만약에 구조 분해(Destructuring)하면 아래처럼 쓸 수도 있겠죠.
+
+font-size: ${({ size }) => SIZES[size]}px;
+
+
+그런데 여기서 size Prop이 값이 없거나 잘못된 값이면 어떻게 될까요? Styled Components에서는 undefined 값을 빈 문자열로 처리해 주기 때문에 font-size: px 같은 잘못된 CSS 코드가 됩니다. 그래서 가능하면 기본 값을 정해주는 게 좋은데요. 여러 가지 방법이 있겠지만, 아래와 같은 식으로 널 병합 연산자(Nullish coalescing operator)를 사용할 수도 있습니다.
+
+font-size: ${({ size }) => SIZES[size] ?? SIZES['medium']}px;
+논리 연산자 사용하기
+함수를 사용할 때 많이 사용하는 패턴 중 하나는 논리 연산자를 사용하는 겁니다. 예를 들어서, round라는 Prop이 참일 때 컴포넌트의 모서리를 둥글게 만드는 예제를 살펴볼게요.
+
+const Button = styled.button`
+  ...
+  ${({ round }) => round && `
+      border-radius: 9999px;
+    `}
+`;
+
+
+round 값이 참이면 그 뒤에 값까지 계산하기 때문에 border-radius: 9999px이라는 문자열이 리턴돼서 적용됩니다. 반대로, round 값이 거짓이면 그냥 false가 리턴돼서 아무런 값도 적용되지 않습니다. React에서 JSX로 조건부 렌더링 하는 것과 비슷하죠?
+
+삼항 연산자 사용하기
+마찬가지로 자주 쓰는 패턴입니다. round 가 참이면 완전히 둥근 모서리를 보여주고, 거짓이면 3px 정도로 살짝 부드럽게 깎인 모서리를 보여주고 싶다면 아래와 같이 삼항 연산자로 쓸 수 있습니다.
+
+border-radius: ${({ round }) => round ? `9999px` : `3px`};

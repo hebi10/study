@@ -1,0 +1,12 @@
+/* ... 처리 */
+p {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  /* 2줄 이상 */
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* 몇줄로 처리할지 */
+  -webkit-box-orient: vertical;
+}

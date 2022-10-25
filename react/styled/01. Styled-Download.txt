@@ -1,0 +1,12 @@
+### 다운로드 명령어 - 리액트에서
+npm install styled-components
+
+참고로 이번 수업은 Styled Components 버전 5를 기준으로 배울 예정입니다. 올바로 설치되었다면 package.json 파일에 아래와 같이 추가됩니다. 맨 앞의 숫자가 5로 시작하면 버전 5입니다.
+
+{
+  ...
+  "dependencies": {
+      ...
+      "styled-components": "^5.3.5"
+    },
+}

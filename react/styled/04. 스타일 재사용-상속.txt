@@ -1,0 +1,164 @@
+HTML 태그에 스타일링하는 건 styled.tagname을 사용해서 할 수 있었습니다. 그런데, JSX 문법으로 직접 만든 컴포넌트나, Styled Components를 사용해 이미 만들어진 다른 컴포넌트에 스타일을 입히려면 어떻게 해야 할까요? 이런 상황에서는 상속을 사용하면 됩니다. 그 방법에 대해서 한번 알아볼게요.
+
+styled() 함수
+Styled Components로 만들어진 컴포넌트를 상속하려면 styled() 함수를 사용하면 됩니다. 코드부터 살펴볼게요.
+
+src/Button.js
+
+import styled from 'styled-components';
+
+const SIZES = {
+  large: 24,
+  medium: 20,
+  small: 16,
+};
+
+const Button = styled.button`
+  background-color: #6750a4;
+  border: none;
+  color: #ffffff;
+  font-size: ${({ size }) => SIZES[size] ?? SIZES['medium']}px;
+  padding: 16px;
+
+  ${({ round }) =>
+    round
+      ? `
+      border-radius: 9999px;
+    `
+      : `
+      border-radius: 3px;
+    `}
+
+  &:hover,
+  &:active {
+    background-color: #463770;
+  }
+`;
+
+export default Button;
+src/App.js
+
+import styled from 'styled-components';
+import Button from './Button';
+
+const SubmitButton = styled(Button)`
+  background-color: #de117d;
+  display: block;
+  margin: 0 auto;
+  width: 200px;
+
+  &:hover {
+    background-color: #f5070f;
+  }
+`;
+
+function App() {
+  return (
+    <div>
+      <SubmitButton>계속하기</SubmitButton>
+    </div>
+  );
+}
+
+export default App;
+9-1
+
+
+Button 컴포넌트의 스타일을 상속해서 새로운 버튼 SubmitButton을 만들고, App 컴포넌트 안에 SubmitButton을 배치하는 상황입니다.
+
+코드를 보면 SubmitButton 컴포넌트를 만들 때 styled(Button)이라고 썼죠? 이렇게 하면 SubmitButton이 Button의 스타일을 상속받게 됩니다. Button 컴포넌트에 SubmitButton의 스타일이 상속됐기 때문에, 마찬가지로 글씨는 흰색으로 보이고 있죠.
+
+상속이라는 단어가 어렵게 느껴질 수도 있는데요, 다른 컴포넌트의 스타일을 가져와서 원하는 대로 사용할 수 있는 것이라고 이해하시면 됩니다. 예시 코드에서 SubmitButton도 Button 의 스타일 전부를 상속하고, 몇 가지 스타일만 추가해 원하는 컴포넌트를 만들고 있습니다.
+
+JSX로 직접 만든 컴포넌트에 styled() 사용하기
+styled.tagname으로 만든 컴포넌트는 바로 styled() 함수를 사용할 수 있지만, 그렇지 않은 컴포넌트는 따로 처리가 필요합니다. 예를 들어, 약관을 보여주는 TermsOfService라는 컴포넌트가 있다고 해 볼게요.
+
+src/TermsOfService.js
+
+function TermsOfService() {
+  return (
+    <div>
+      <h1>㈜코드잇 서비스 이용약관</h1>
+      <p>
+        환영합니다.
+        <br />
+        Codeit이 제공하는 서비스를 이용해주셔서 감사합니다. 서비스를
+        이용하시거나 회원으로 가입하실 경우 본 약관에 동의하시게 되므로, 잠시
+        시간을 내셔서 주의 깊게 살펴봐 주시기 바랍니다.
+      </p>
+      <h2>제 1 조 (목적)</h2>
+      <p>
+        본 약관은 ㈜코드잇이 운영하는 기밀문서 관리 프로그램인 Codeit에서
+        제공하는 서비스를 이용함에 있어 이용자의 권리, 의무 및 책임사항을
+        규정함을 목적으로 합니다.
+      </p>
+    </div>
+  );
+}
+
+export default TermsOfService;
+
+
+TermsOfService는 JSX 문법을 직접 사용해서 바로 컴포넌트가 만들어졌는데요. 이 컴포넌트를 styled() 함수로 감싸보겠습니다.
+
+src/App.js
+
+import styled from 'styled-components';
+import Button from './Button';
+import TermsOfService from './TermsOfService';
+
+const StyledTermsOfService = styled(TermsOfService)`
+  background-color: #ededed;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 40px auto;
+  width: 400px;
+`;
+
+const SubmitButton = styled(Button)`
+  background-color: #de117d;
+  display: block;
+  margin: 0 auto;
+  width: 200px;
+
+  &:hover {
+    background-color: #f5070f;
+  }
+`;
+
+function App() {
+  return (
+    <div>
+      <StyledTermsOfService />
+      <SubmitButton>계속하기</SubmitButton>
+    </div>
+  );
+}
+
+export default App;
+9-2
+
+
+styled()로 지정한 스타일이 적용되지 않습니다. StyledTermsOfService에 지정한 배경색이랑 너비가 적용이 안 된 거 같네요. 왜 그럴까요?
+
+Styled Components는 내부적으로 className을 따로 생성합니다. 그리고, 자체적으로 생성된 className이 있는 부분에 styled() 함수의 스타일이 입혀지죠.
+
+그런데, JSX 문법으로 직접 만든 컴포넌트는 styled() 함수가 적용될 className에 대한 정보가 없는데요. styled() 함수에서 지정한 스타일이 입혀질 부분이 어딘지 알 수 없으니 스타일이 적용되지 않은 거죠.
+
+이렇게, Styled Components를 사용하지 않고 직접 만든 컴포넌트는 className 값을 Prop으로 따로 내려줘야 styled() 함수를 사용할 수 있습니다. 이런 식으로요.
+
+src/TermsOfService.js
+
+function TermsOfService({ className }) {
+  return (
+    <div className={className}>
+      ...
+    </div>
+  );
+}
+9-3
+
+
+직접 만든 컴포넌트에 className Prop을 따로 내려주는 건 syled() 함수가 적용될 부분의 className을 별도로 정해주는 거라고 이해하시면 됩니다. 위 코드의 경우엔, <div> 태그에 className을 내려줬기 때문에 styled(TermsOfService)에서 작성한 코드는 TermsOfService 안에 있는 <div> 태그에 적용됩니다.
+
+정리하자면, 스타일 상속을 하려면 styled() 함수를 사용하면 되는데, styled.tagname으로 만든 컴포넌트는 styled() 함수로 바로 상속하면 되고, Styled Components를 사용하지 않고 직접 만든 컴포넌트에는 클래스 이름을 내려준 후에 styled() 함수로 상속해야 합니다. 어렵지 않죠?

@@ -1,0 +1,85 @@
+요즘 스마트폰 앱이나 웹 서비스들에서는 대부분 라이트 모드와 다크 모드라는 걸 지원합니다. 트위터는 각자 입맛에 따라 메인 색상과 이모티콘, 폰트 크기까지 설정할 수 있게 해 주기도 하는데요. 이런 식으로 사용자가 보는 화면의 색상, 글자 크기, 글자 색 등을 모아 놓은 걸 '테마'라고 합니다. Styled Components에서는 테마를 쉽게 만들 수 있는 기능이 있는데요. 이번 수업에서는 테마를 만드는 법에 대해 알아봅시다.
+
+ThemeProvider로 테마 설정 사용하기
+테마 기능을 만들기 위해서는 현재 테마로 설정된 값을 사이트 전체에서 참조할 수 있어야 합니다. React에서는 이런 상황에서 Context라는 걸 사용하는데요. Styled Components에서도 Context를 기반으로 테마를 사용할 수 있습니다. Context를 내려주는 컴포넌트로 ThemeProvider라는 걸 사용하면 되죠.
+
+예시로 메인 색상을 파랑, 노랑, 빨강으로 설정할 수 있는 테마를 만들어 보겠습니다.
+
+App.js
+
+import { ThemeProvider } from "styled-components";
+import Button from "./Button";
+
+function App() {
+  const theme = {
+    primaryColor: '#1da1f2',
+  };
+
+  return (
+    <ThemeProvider theme={theme}>
+      <Button>확인</Button>
+    </ThemeProvider>
+  );
+}
+
+export default App;
+
+
+ThemeProvider라는 Context Provider를 사용해서 theme이라는 객체를 내려줍니다. 이렇게 하면 ThemeProvider 안에 있는 Styled Components로 만든 컴포넌트에서는 Props를 사용하듯이 theme이라는 객체를 쓸 수 있습니다.
+
+예를 들어서 Button 컴포넌트에서 theme 값을 써 볼게요. Prop 값을 사용하듯이  theme이라는 값을 쓰면 되는데요. 기존에 있던 배경색 대신에 아래처럼 함수를 삽입해서 테마 값을 사용합니다. 어렵지 않죠?
+
+src/Button.js
+
+const Button = styled.button`
+  background-color: ${({ theme }) => theme.primaryColor};
+  /* ... */
+`;
+
+
+만약에 여러 테마를 선택하게 하고 싶다면 useState 를 활용해서 테마를 바꿔주면 됩니다.
+
+import { useState } from 'react';
+import { ThemeProvider } from 'styled-components';
+import Button from './Button';
+
+function App() {
+  const [theme, setTheme] = useState({
+    primaryColor: '#1da1f2',
+  });
+
+  const handleColorChange = (e) => {
+    setTheme((prevTheme) => ({
+      ...prevTheme,
+      primaryColor: e.target.value,
+    }));
+  };
+
+  return (
+    <ThemeProvider theme={theme}>
+      <select value={theme.primaryColor} onChange={handleColorChange}>
+        <option value="#1da1f2">blue</option>
+        <option value="#ffa800">yellow</option>
+        <option value="#f5005c">red</option>
+      </select>
+      <br />
+      <br />
+      <Button>확인</Button>
+    </ThemeProvider>
+  );
+}
+
+export default App;
+17-2
+
+
+그런데, 만약 테마 설정 페이지를 만든다고 하면 테마 값을 일반적인 컴포넌트에서 참조할 필요도 생길 텐데요. 그럴 때는 ThemeContext를 불러오면 됩니다. 이 값은 React Context이기 때문에 useContext로 씁니다.
+
+import { useContext } from 'react';
+import { ThemeContext } from 'styled-components';
+
+// ...
+
+function SettingPage() {
+  const theme = useContext(ThemeContext); // { primaryColor: '#...' }
+}

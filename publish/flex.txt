@@ -1,0 +1,180 @@
+### 참고 사이트 1분 미만 flex
+https://studiomeal.com/archives/197
+
+Flex(플렉스)는 Flexible Box, Flexbox라고 부르기도 합니다.
+Flex는 레이아웃 배치 전용 기능으로 고안되었습니다. 그래서 레이아웃을 만들 때 딱히 사용할게 없어서 쓰던 
+float나 inline-block 등을 이용한 기존 방식보다 훨씬 강력하고 편리한 기능들이 많아요.
+
+<div class="container">
+	<div class="item">helloflex</div>
+	<div class="item">abc</div>
+	<div class="item">helloflex</div>
+</div>
+
+Flex의 속성들은,
+
+컨테이너에 적용하는 속성
+아이템에 적용하는 속성
+
+.container {
+	display: flex;
+	/* display: inline-flex; */
+}
+
+inline-flex도 있는데, 이건 block과 inline-block의 관계를 생각하시면 돼요.
+아이템의 배치와 관련이 있다기 보다는, 컨테이너가 주변 요소들과 어떻게 어우러질지 결정하는 값입니다. inline-flex는 inline-block처럼 동작해요.
+
+.container {
+	flex-direction: row; = 왼쪽에서 부터
+	/* flex-direction: row-reverse; */ = 오른쪽에서 부터
+	/* flex-direction: column; */ = 위에서 아래로
+	/* flex-direction: column-reverse; */ = 아래에서 위로
+}
+
+row (기본값)
+아이템들이 행(가로) 방향으로 배치됩니다.
+
+row-reverse
+아이템들이 역순으로 가로 배치됩니다.
+
+column
+아이템들이 열(세로) 방향으로 배치됩니다.
+그냥 block 요소들을 쌓아 놓은 것처럼 보이죠?
+
+column-reverse
+아이템들이 역순으로 세로 배치 됩니다.
+
+크기가 작은 모바일 기기에서 column으로 배치하다가 일정 폭 이상이 되면 row로 바꿔주는 식으로 반응형 레이아웃을 구현할 수도 있겠네요~
+
+.container {
+	flex-wrap: nowrap;
+	/* flex-wrap: wrap; */
+	/* flex-wrap: wrap-reverse; */
+}
+
+nowrap (기본값)
+줄바꿈을 하지 않습니다. 넘치면 그냥 삐져 나가요.
+
+wrap
+줄바꿈을 합니다. float이나 inline-block으로 배치한 요소들과 비슷하게 동작해요.
+
+wrap-reverse
+줄바꿈을 하는데, 아이템을 역순으로 배치해요. 그림을 보면 이해하실 수 있을 거예요.
+
+.container {
+	flex-flow: row wrap;
+	/* 아래의 두 줄을 줄여 쓴 것 */
+	/* flex-direction: row; */
+	/* flex-wrap: wrap; */
+}
+
+.container {
+	justify-content: flex-start;
+	/* justify-content: flex-end; */
+	/* justify-content: center; */
+	/* justify-content: space-between; */
+	/* justify-content: space-around; */
+	/* justify-content: space-evenly; */
+}
+
+flex-start (기본값)
+아이템들을 시작점으로 정렬합니다.
+flex-direction이 row(가로 배치)일 때는 왼쪽, column(세로 배치)일 때는 위예요.
+
+flex-end
+아이템들을 끝점으로 정렬합니다.
+flex-direction이 row(가로 배치)일 때는 오른쪽, column(세로 배치)일 때는 아래예요.
+
+center
+아이템들을 가운데로 정렬합니다.
+
+space-between
+아이템들의 “사이(between)”에 균일한 간격을 만들어 줍니다.
+
+space-around
+아이템들의 “둘레(around)”에 균일한 간격을 만들어 줍니다.
+
+space-evenly
+아이템들의 사이와 양 끝에 균일한 간격을 만들어 줍니다.
+주의! IE와 엣지(Edge)에서는 지원되지 않습니다👎
+이 웹사이트의 메뉴 부분은 브라우저 폭이 1024px 이상일 때 space-evenly가 적용되도록 했는데요, 
+IE와 엣지에서만 space-around로 적용이 되도록 처리해 두었어요.
+
+.container {
+	align-items: stretch;
+	/* align-items: flex-start; */
+	/* align-items: flex-end; */
+	/* align-items: center; */
+	/* align-items: baseline; */
+}
+
+stretch (기본값)
+아이템들이 수직축 방향으로 끝까지 쭈욱 늘어납니다.
+
+flex-start
+아이템들을 시작점으로 정렬합니다.
+flex-direction이 row(가로 배치)일 때는 위, column(세로 배치)일 때는 왼쪽이에요.
+
+flex-end
+아이템들을 끝으로 정렬합니다.
+flex-direction이 row(가로 배치)일 때는 아래, column(세로 배치)일 때는 오른쪽이에요.
+
+center
+아이템들을 가운데로 정렬합니다.
+
+baseline
+아이템들을 텍스트 베이스라인 기준으로 정렬합니다.
+
+.container {
+	flex-wrap: wrap;
+	align-content: stretch;
+	/* align-content: flex-start; */
+	/* align-content: flex-end; */
+	/* align-content: center; */
+	/* align-content: space-between; */
+	/* align-content: space-around; */
+	/* align-content: space-evenly; */
+}
+flex-wrap: wrap;이 설정된 상태에서, 아이템들의 행이 2줄 이상 되었을 때의 수직축 방향 정렬을 결정하는 속성입니다.
+
+.item {
+	flex-basis: auto; /* 기본값 */
+	/* flex-basis: 0; */
+	/* flex-basis: 50%; */
+	/* flex-basis: 300px; */
+	/* flex-basis: 10rem; */
+	/* flex-basis: content; */
+}
+
+flex-basis의 값으로는 우리가 width, height 등에 사용하는 각종 단위의 수가 들어갈 수 있고요, 기본값 auto는 해당 아이템의 width값을 사용합니다. 
+width를 따로 설정하지 않으면 컨텐츠의 크기가 되겠지요. content는 컨텐츠의 크기로, width를 따로 설정하지 않은 경우와 같아요.
+
+.item {
+	flex-grow: 1;
+	/* flex-grow: 0; */ /* 기본값 */
+}
+flex-grow에 들어가는 숫자의 의미는, 아이템들의 flex-basis를 제외한 여백 부분을 flex-grow에 지정된 숫자의 비율로 나누어 가진다고 생각하시면 됩니다.
+
+/* 1:2:1의 비율로 세팅할 경우 */
+.item:nth-child(1) { flex-grow: 1; }
+.item:nth-child(2) { flex-grow: 2; }
+.item:nth-child(3) { flex-grow: 1; }
+
+.item {
+	flex-basis: 150px;
+	flex-shrink: 1; /* 기본값 */
+}
+
+flex-shrink를 0으로 세팅하면 아이템의 크기가 flex-basis보다 작아지지 않기 때문에 고정폭의 컬럼을 쉽게 만들 수 있어요. 고정 크기는 width로 설정합니다.
+
+아주 자주 쓰는, 이런↓ 레이아웃도 손쉽게!
+.container {
+	display: flex;
+}
+.item:nth-child(1) {
+	flex-shrink: 0;
+	width: 100px;
+}
+.item:nth-child(2) {
+	flex-grow: 1;
+}

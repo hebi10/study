@@ -1,0 +1,110 @@
+이번 수업에서는 Styled Components를 사용하면서 자주 부딪히는 문제들에 대해 추가적인 팁을 드릴까 해요.
+
+버튼 모양 링크가 필요할 때
+19-1
+
+
+사이트를 개발하다보면 모양은 버튼이지만 역할은 링크인 경우가 있습니다. 예를 들어 페이스북의 로그인 페이지에 있는 "Create new account" 버튼은 모양은 버튼이지만 "Log In"이랑 달리 <a> 태그로 되어 있고, 클릭하면 회원가입 페이지로 이동합니다.
+
+버튼의 스타일 코드는 버튼 컴포넌트에 있을텐데, 이걸 <a> 태그 버전으로도 만들어야 하는 걸까요? 이렇게 반복되는 스타일링 코드를 어떻게 관리하면 좋을까요? 이럴 때 간편하게 사용할 수 있는게 바로 as 라는 Prop 입니다. 예를 들어서 아래와 같이 Button 이라는 컴포넌트가 <button> 태그로 만들어져 있을 때, 이걸 <a> 태그로 바꿔서 사용할 수 있습니다.
+
+const Button = styled.button`
+  /* ... */
+`;
+
+
+as 로 태그 이름을 내려주면 해당하는 태그로 사용할 수 있습니다. 굳이 버튼 모양의 링크 컴포넌트를 만들 필요가 없겠죠?
+
+<Button href="https://example.com" as="a">
+  LinkButton
+</Button>
+원치 않는 Props가 전달될 때
+아래처럼 Prop을 Spread 문법을 사용해서 <a> 태그로 전달하는 Link 컴포넌트가 있다고 해 봅시다. 그리고 StyledLink 라는 걸 만들어서 underline 이라는 불린 Prop으로 스타일링 해 볼게요.
+
+import styled from 'styled-components';
+
+function Link({ className, children, ...props }) {
+  return (
+    <a {...props} className={className}>
+      {children}
+    </a>
+  );
+};
+
+const StyledLink = styled(Link)`
+  text-decoration: ${({ underline }) => underline ? `underline` : `none`};
+`;
+
+function App() {
+  return (
+    <StyledLink underline={false} href="https://codeit.kr">
+      Codeit으로 가기
+    </StyledLink>
+  );
+}
+
+export default App;
+
+
+위 코드를 실행하면 이런 경고가 뜹니다.
+
+react-dom.development.js:86 Warning: Received `false` for a non-boolean attribute `underline`.
+
+If you want to write it to the DOM, pass a string instead: underline="false" or underline={value.toString()}.
+
+If you used to conditionally omit it with underline={condition && value}, pass underline={condition ? value : undefined} instead.
+    at a
+    at Link (http://localhost:3000/static/js/bundle.js:26:5)
+    at O (http://localhost:3000/static/js/bundle.js:44495:6)
+    at App
+
+
+이 오류는 React에서 알려주는 오류인데요. HTML 태그에 underline 이라는 속성을 지정했는데, 그 속성의 값이 문자열이 아니라서 생긴 오류입니다. <a> 태그에는 underline 이라는 속성이 없죠. 이 문제의 근본적인 원인은 <a {...props} className={className}> 이 부분인데요. Spread를 하는 과정에서 의도하지 않은 underline Prop까지 내려간 것이 원인입니다.
+
+underline Prop이 전달되는 순서를 정리해 보면 이렇습니다.
+
+
+StyledLink 컴포넌트에서 underline 이라는 Prop을 받는다
+StyledLink 가 스타일링하고 있는 Link 컴포넌트에 underline Prop이 전달된다
+Link 컴포넌트에서 Spread 문법을 통해 <a> 태그에 underline Prop이 전달된다.
+이럴 때는 구조 분해 코드를 조금 고쳐서 underline을 제외하면 원치 않는 Prop이 전달되는 걸 막을 수 있습니다.
+
+function Link({ className, children, underline, ...props }) {
+  return (
+    <a {...props} className={className}>
+      {children}
+    </a>
+  );
+};
+
+
+
+그런데 생각해보면 underline 이라는 Prop은 Link 에서 쓰려고 만든 게 아니라 StyledLink 컴포넌트에서만 쓰려고 만든 건데, Link 에 Prop으로 전달되는게 좀 더 근본적인 문제인 거 같습니다. 이럴 때 아예 Prop이 전달되지 않게 만드는 방법이 있습니다. 바로 Transient Prop이라는 걸 사용하는 건데요.
+
+Transient Prop을 사용하면 Styled Components로 스타일링하는 컴포넌트에서만 Prop을 사용하고, 스타일링의 대상이 되는 컴포넌트에는 Prop이 전달되지 않도록 할 수 있습니다(참고로, Transient는 "일시적인, 순간적인"이라는 뜻입니다).
+
+아래의 코드는 StyledLink 컴포넌트 안에서만 Prop을 사용하고 Link에는 전달하지 않는 예시입니다. Transient Prop을 만들려면 앞에다 $ 기호를 붙여주면 됩니다. 아래 코드에서 $underline Prop은 StyledLink 안에서만 사용되고, Link 로 전달되지는 않습니다.
+
+import styled from 'styled-components';
+
+function Link({ className, children, ...props }) {
+  return (
+    <a {...props} className={className}>
+      {children}
+    </a>
+  );
+};
+
+const StyledLink = styled(Link)`
+  text-decoration: ${({ $underline }) => $underline ? `underline` : `none`};
+`;
+
+function App() {
+  return (
+    <StyledLink $underline={false} href="https://codeit.kr">
+      Codeit으로 가기
+    </StyledLink>
+  );
+}
+
+export default App;

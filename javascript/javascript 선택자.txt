@@ -1,0 +1,21 @@
+1. 자바스크립트로 태그 선택하기
+
+메소드: document.getElementById('id')	
+의미 : HTML id속성으로 태그 선택하기	
+결과 : id에 해당하는 태그 하나
+
+메소드: document.getElementsByClassName('class')	
+의미 : HTML class속성으로 태그 선택하기	
+결과 : class에 해당하는 태그 모음(HTMLCollection)
+
+메소드: document.getElementsByTagName('tag')	
+의미 : HTML 태그 이름으로 태그 선택하기	
+결과 : tag에 해당하는 태그 모음(HTMLCollection)
+
+메소드: document.querySelector('css')	
+의미 : css 선택자로 태그 선택하기	
+결과 : css 선택자에 해당하는 태그 중 가장 첫번째 태그 하나
+
+메소드: document.querySelectorAll('css')	
+의미 : css 선택자로 태그 선택하기	
+결과 : css 선택자에 해당하는 태그 모음(NodeList)

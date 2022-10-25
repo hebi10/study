@@ -1,0 +1,101 @@
+### 코드잇 다운로드 설명
+
+우리가 따로 설치해서 써야 하는데요.
+
+이번 노트에서는 npm 패키지에 대해서 가볍게 알아보고,
+
+react-router-dom 이라는 패키지를 설치해보겠습니다.
+
+패키지란?
+Node.js를 설치하면 npm(노드 패키지 매니저)라는 프로그램도 함께 설치합니다.
+
+여기서 패키지라는 건 자바스크립트 모듈을 모아 놓은 묶음 같은 건데요.
+
+npm은 패키지를 설치하거나 삭제하는 것처럼 패키지를 관리하는 프로그램입니다.
+
+패키지를 설치하면 미리 작성된 자바스크립트 모듈을 가져다 쓸 수 있죠.
+
+참고로 우리는 이미 리액트를 react 와 react-dom 이라는 패키지로 사용하고 있었습니다.
+
+혹시 패키지에 대해서 좀 더 정확히 알고 싶으시다면, Node.js의 기본기의 레슨을 참고해주세요.
+
+npmjs.com 에 접속하면 오픈 소스로 공개된 패키지들을 볼 수 있는데요.
+
+리액트와 마찬가지로 리액트 라우터도 npm에서 다운로드 하면 됩니다.
+
+npm 사이트에서 react-router-dom 이라고 검색하면 우리가 사용할 패키지를 확인할 수 있죠.
+
+https://www.npmjs.com/package/react-router-dom
+
+패키지 설치하기
+패키지를 설치하려면 package.json이 있는 폴더에서 터미널을 열고,
+
+npm install <패키지 이름> 이라는 명령어를 실행하면 됩니다.
+
+우리의 경우에는 프로젝트 폴더에서 터미널을 열어서 실행하면 되는데요.
+
+VS Code에서 프로젝트를 열어서 터미널을 열고
+
+아래처럼 npm install react-router-dom@6 이라고 입력해주세요.
+
+여기서 react-router-dom 은 패키지 이름이고,
+
+뒤에 있는 @6 은 패키지 버전을 6점대로 설치하겠다는 의미입니다.
+
+잘 설치됐는지 확인해보면,
+
+package.json 파일에 dependencies 아래에 react-router-dom 이란 게 추가되고
+
+node_modules/ 폴더에 react-router-dom이라는 폴더가 생겼네요.
+
+react-router v6 설치
+
+참고로 코드잇 실행기에서는 이미 리액트 라우터가 설치되어있으니까 따로 설치할 필요가 없습니다.
+
+react-router-dom 패키지를 사용할 때 주의할 점!
+VSCode에서 자동완성 기능을 사용하다 보면
+
+가끔 react-router-dom 이 아닌 react-router 라는 패키지에서 임포트할 때가 있습니다.
+
+여기서 react-router 라는 패키지는 리액트 라우터를 만드는 개발자들이 내부적으로 사용하는 건데요.
+
+react-router-dom 을 설치하면 함께 설치되는 패키지이기 때문에 자동완성에도 종종 뜨는 겁니다.
+
+웹 사이트를 만들 때는 반드시 react-router-dom 패키지를 통해서 임포트해야 하니까,
+
+혹시 잘못 임포트하지 않도록 주의합시다.
+
+라우터 컴포넌트 감싸기
+이제 프로젝트의 최상위 컴포넌트인 Main.js 파일에 가서 라우터 컴포넌트를 적용해봅시다.
+
+BrowserRouter라는 컴포넌트를 불러와서 컴포넌트 전체를 감싸줄게요.
+
+사실 라우터에는 여러 종류가 있지만, 우리는 브라우저의 기본적인 방식으로 사용할 거니까
+
+BrowserRouter라는 걸 사용할게요.
+
+혹시 다른 라우터에는 어떤 것들이 있는지 궁금하시다면 아래 링크를 참고하시면 됩니다.
+https://reactrouter.com/en/v6.3.0/api#browserrouter
+
+React Router | API Reference
+
+import { BrowserRouter } from 'react-router-dom';
+import App from './components/App';
+import HomePage from './pages/HomePage';
+
+function Main() {
+  return (
+    <BrowserRouter>
+      <App>
+        <HomePage />
+      </App>
+    </BrowserRouter>
+  );
+}
+
+export default Main;
+
+
+### 버전이 최신이면 버그가 있어 오류가 뜰수 있음 오류가 있을 시 (코드잇은 => 6.0.2)
+https://velog.io/@whdms3368/React-Error-react-dom-v6-%EB%A5%BC-v5%EB%A1%9C-%EB%B2%84%EC%A0%84-%EB%82%AE%EC%B6%94%EA%B8%B0
+npm i react-router-dom@6.0.2
