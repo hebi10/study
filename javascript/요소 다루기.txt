@@ -5,6 +5,15 @@
 3) 요소 노드 추가 혹은 이동하기: element.prepend, element.append, element.after, element.before
 4) 요소 노드 삭제하기: element.remove()
 
+// 1. 요소 노드 만들기: document.createElement('태그이름')
+const first = document.createElement('li');
+
+// 2. 요소 노드 꾸미기: textContent, innerHTML, ...
+first.textContent = '처음';
+
+// 3. 요소 노드 추가하기: NODE.prepend, append, after, before
+tomorrow.prepend(first);
+
 
 2. HTML 속성 다루기
 
@@ -63,3 +72,4 @@ outerHTML은 새로운 값을 할당하면
 element.textContent	
 요소 노드 내부의 내용들 중에서 HTML을 제외하고 텍스트만 리턴	
 textContent는 말그대로 텍스트만 다루기 때문에HTML태그를 쓰더라도 모두 텍스트로 처리됨
+
