@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cursor</title>
+    <style>
+        html , body{
+            height: 100%;
+        }
+        body{
+            margin: 0;
+            /*
+            cursor 만드는 사이트
+                https://www.cursor.cc/ 
+                
+            */
+            /* cursor: url("./images/sbs.cur"), auto; */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        div{width: 50%; height: 50%; background-color: lightgreen;
+            cursor: url("./images/sbs.cur"), auto;          /* 파일의 w / h 크기가 중요하다 */
+        }
+        div:active{cursor: url("./images/active.cur"), auto;}
+
+        /* 
+            실 사용 예 ) 
+            브로앤팁스 https://brontips.com/
+        */
+    </style>
+</head>
+<body>
+    <div>
+        
+    </div>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>scrool class</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../css/global.css">
+    <script>
+        $(document).ready(function(){
+            $(window).scroll(function(s){
+                /* $(window).scrollTop();       // 페이지 상단부터 내가 보는 화면 상단까지
+                $('section').offset().top;      // 선택자의 시작점(document)에서의 위치 */
+                // s = $('span').length;
+                // for(var i=0; i < s; i++){
+                //     if($(window).scrollTop() > ($('span').eq(i).offset().top - $(window).height()/1.7)){
+                //         $('[data-scroll="transform"]').eq(i).addClass('active');
+                //     }else{
+                //         $('[data-scroll="transform"]').eq(i).removeClass('active');
+                //     }
+                // }
+                $('[data-scroll="transform"]').each(function(){
+                    if($(window).scrollTop() > ($(this).offset().top - $(window).height()/1.7)){
+                        $(this).addClass('active');
+                    }else{
+                        $(this).removeClass('active');
+                    }
+                });
+
+                $('[data-scroll="leftRightArea"]').each(function(){
+                    if($(window).scrollTop() > ($(this).offset().top - $(window).height()/1.7)){
+                        $('[data-scroll="leftRightArea"] > *').addClass('active');
+                        $('[data-scroll="leftRightArea"] > *').css('transition-delay',function(index){
+                            return index * 0.1 + 's';
+                        });
+                    }else{
+                        $('[data-scroll="leftRightArea"] > *').removeClass('active');
+                    }
+                });
+            });
+        });
+    </script>
+    <style>
+        header{background-color: lightblue;}
+        section{
+            display: block;
+            text-align: center;
+        }
+        section span[data-scroll="transform"]{
+            display: block;
+            transition: 0.3s;
+            opacity: 0;
+            transform:translateX(-50px);
+        }
+        [data-scroll="transform"].active{
+            opacity: 1;
+            transform:translateX(0px);
+        }
+        footer ul{margin: 0; padding: 0;}
+        footer ul li{list-style: none; float: left;}
+        footer ul::after{
+            content: '';
+            visibility: hidden;
+            display: block;
+            clear: both;
+        }
+        [data-scroll="leftRightArea"] > *{opacity: 0; transform:translateX(-50px); transition: 0.3s;}
+        [data-scroll="leftRightArea"] > *.active{opacity: 1; transform:translateX(0px);}
+    </style>
+</head>
+<body>
+    <header>
+        header
+    </header>
+    <section>
+        <span data-scroll="transform">section</span>
+        <span data-scroll="transform">section</span>
+        <span data-scroll="transform">section</span>
+        <span data-scroll="transform">section</span>
+        <span data-scroll="transform">section</span>
+        <span data-scroll="transform">section</span>
+        <span data-scroll="transform">section</span>
+    </section>
+    <footer>
+        <ul data-scroll="leftRightArea">
+            <li>f</li>
+            <li>o</li>
+            <li>o</li>
+            <li>t</li>
+            <li>e</li>
+            <li>r</li>
+        </ul>
+    </footer>
+</body>
+</html>

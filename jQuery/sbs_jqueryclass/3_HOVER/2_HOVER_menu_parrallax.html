@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2_HOVER_menu_parrallax</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function(){
+            mainBG(20);
+        });
+
+        function mainBG(count){
+            var headerBG = $('header');
+            
+            for(i=0; i<count; i++){
+                var starImg = $('<img/>');
+                var starWidth = 25 + Math.random() * 25;
+                var starMovePx = 10 + Math.random() * 25;
+                var starX = Math.random() * (headerBG.width()-starImg.width());
+                var starY = Math.random() * headerBG.height();
+
+                    starImg.attr({
+                        'src' : 'images/night.png',
+                        'data-movePx' : starMovePx
+                    });
+                    
+                    starImg.css({
+                        'width' : starWidth
+                        });
+                        
+                    starImg.css({
+                        'left' :starX,
+                        'top' : starY
+
+                    })
+                    headerBG.append(starImg);
+                };
+
+                headerBG.mousemove(function(e){
+                    $(this).find('img').each(function(){
+                        var mousePositionX = 1-(e.clientX / $(window).width()*2);
+                        var mousePositionY = 1-(e.clientY / $(window).height()*2);
+                        mousePositionX = mousePositionX * $(this).attr('data-movePx');
+                        mousePositionY = mousePositionY * $(this).attr('data-movePx');
+                        $(this).css({
+                            'transform' : 'translateX(' +  mousePositionX + 'px) translateY(' +  mousePositionY + 'px)'
+                        })
+                    });
+                });
+            };
+    </script>
+    <style>
+        header{position: relative; background-color: rgb(7, 7, 98); color: yellow; overflow: hidden;}
+        header img{position: absolute;}
+    </style>
+</head>
+<body>
+    <header>
+        header
+        <div class="menuArea">
+            <div>
+                <nav>
+                    
+                </nav>
+            </div>
+        </div>
+    </header>
+    <section>section</section>
+    <footer>footer</footer>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLICK</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function(){
+            $('.example_1').click(function(){
+                $('.example_1').addClass('active');
+            })
+
+            /* 
+            조건문 if
+                if(1조건문){
+                    1조건문이 맞으면 
+                }else if(2조건문){
+                    1조건문이 틀리고 , 2조건문이 맞으면
+                }else{
+                    1 조건문 , 2 조건문이 둘 다 틀리면
+                }
+             */
+
+            $('.example_2').click(function(){
+                // if($('.example_2').hasClass('active')){
+                //     $('.example_2').removeClass('active');
+                // }else{
+                //     $('.example_2').addClass('active');
+                // }
+
+                $('.example_2').toggleClass('active');
+            })
+        })
+    </script>
+    <style>
+        div{
+            width: 100px;
+            height: 100px;
+            border: 2px solid black;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .example_1.active{
+            background-color: lightblue;
+        }
+
+        .example_2.active{
+            background-color: lightblue;
+        }
+    </style>
+</head>
+<body>
+    <div class="example_1">
+        ex1
+    </div>
+    <div class="example_2">
+        ex2
+    </div>
+</body>
+</html>

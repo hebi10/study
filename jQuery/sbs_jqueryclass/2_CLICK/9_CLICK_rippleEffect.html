@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bubble hover effect</title>
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function(){
+            $('ul li').click(function(e){
+                var spanX = e.clientX - e.target.offsetLeft;
+                var spanY = e.clientY - e.target.offsetTop;
+                var ripples = $('<span></span>');
+
+                $(this).append(ripples);
+                $(ripples).css({
+                    'left' : spanX,
+                    'top' : spanY
+                });
+
+                setTimeout(function(){
+                    ripples.remove()
+                },1000)
+            });
+        })
+    </script>
+    <style>
+        *{margin: 0; padding: 0; list-style: none;}
+      
+        html , body , div{
+            height: 100%;
+            background-color: lavender;
+        }
+
+        div{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+      
+        ul{
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap:20px;
+        }
+        ul li{
+            width: calc(100% / 4 - 20px);
+            height: 100px;
+            padding: 20px;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        span{
+            width: 10px;
+            height: 10px;
+            background-color: red;
+            transform: translate(-50%,-50%);
+            border-radius: 100%;
+            animation: animate 1s linear infinite;
+            position: absolute;
+            pointer-events: none;
+        }
+
+        @keyframes animate{
+            0%{
+                width: 0;
+                height: 0;
+                opacity: 0.5;
+            }
+            100%{
+                width: 500px;
+                height: 500px;
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <ul class="bubbleList">
+            <li>list - 1</li>
+            <li>list - 2</li>
+            <li>list - 3</li>
+            <li>list - 4</li>
+            <li>list - 5</li>
+            <li>list - 6</li>
+            <li>list - 7</li>
+            <li>list - 8</li>
+            <li>list - 9</li>
+            <li>list - 10</li>
+            <li>list - 11</li>
+            <li>list - 12</li>
+        </ul>
+    </div>
+</body>
+</html>

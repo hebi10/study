@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mouse move</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>    <script>
+        $(document).ready(function(){
+            $('section').mousemove(function(e){
+                /* 
+                    client  - 공간 (태그) 안에서의 위치 
+                    offset  - 뷰포트 (브라우저 안에서의 위치)
+                    page    - body 안에서의 위치
+                    screen  - 모니터 안에서의 위치
+
+                    console.log('브라우저 안에서의 위치 = ' + e.clientY);
+                    console.log('offset 좌표 = ' + e.offsetY);
+                    console.log('page 좌표 = + 'e.pageY);
+                    console.log('screen' 좌표 = + e.screenY);
+                 */
+                var screenX = e.clientX / $(window).width() * 2 - 1;
+                var screenY = e.offsetY / $('section').height() * 2 - 1;
+                console.log('screenX 값은 ' + screenX + ' screenY 값은 ' + screenY);
+            });
+        })
+    </script>
+    <style>
+        header div.menuArea{position: fixed; left: 0; top: 0; width: 100%; height: 70px; font-size: 16px; background-color: white; box-shadow: 1px 1px 10px -5px black;}
+        header div.menuArea div {height: 100%; max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        header div.menuArea div h1{font-size: 30px;}
+        header div.menuArea div nav{height: 100%; }
+        header div.menuArea div nav > ul{list-style: none; height: 100%; display: flex; align-items: center;}
+        header div.menuArea div nav > ul > li{ width: 100px; height: 100%; position: relative;}
+        header div.menuArea div nav > ul > li a{font-size: 16px; text-decoration: none; color: black; text-align: center;}
+        header div.menuArea div nav > ul > li > a{ display: flex; justify-content: center; align-items: center; height: 100%; }
+        header div.menuArea div nav > ul > li ul{
+            list-style: none;
+            background-color: white; text-align: center; 
+            border: 1px solid rgba(0, 0, 0, 0.2); border-top: none;
+            position: absolute;
+            top: 70px; width: 100%;
+            display: none;
+            overflow: hidden;
+        }
+
+        /* header div.menuArea div nav > ul > li:hover ul{
+            top: 70px;
+            height: 206px;
+        } */
+
+        header div.menuArea div nav > ul > li ul li a{
+            display: block;
+            padding: 10px 0;
+        }
+
+        header div.menuArea div nav > ul > li.hover ul{
+            top: 70px;
+            height: 206px;
+        }
+
+
+    </style>
+</head>
+<body>
+    <header>
+        header
+        <div class="menuArea">
+            <div>
+                <h1>LOGO</h1>
+                <nav>
+                    <ul>
+                        <li><a href="#">menu1</a>
+                            <ul>
+                                <li><a href="#">menu1 - 1</a></li>
+                                <li><a href="#">menu1 - 2</a></li>
+                                <li><a href="#">menu1 - 3</a></li>
+                                <li><a href="#">menu1 - 4</a></li>
+                                <li><a href="#">menu1 - 5</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">menu2</a>
+                            <ul>
+                                <li><a href="#">menu2 - 1</a></li>
+                                <li><a href="#">menu2 - 2</a></li>
+                                <li><a href="#">menu2 - 3</a></li>
+                                <li><a href="#">menu2 - 4</a></li>
+                                <li><a href="#">menu2 - 5</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">menu3</a>
+                            <ul>
+                                <li><a href="#">menu3 - 1</a></li>
+                                <li><a href="#">menu3 - 2</a></li>
+                                <li><a href="#">menu3 - 3</a></li>
+                                <li><a href="#">menu3 - 4</a></li>
+                                <li><a href="#">menu3 - 5</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">menu4</a>
+                            <ul>
+                                <li><a href="#">menu4 - 1</a></li>
+                                <li><a href="#">menu4 - 2</a></li>
+                                <li><a href="#">menu4 - 3</a></li>
+                                <li><a href="#">menu4 - 4</a></li>
+                                <li><a href="#">menu4 - 5</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">menu5</a>
+                            <ul>
+                                <li><a href="#">menu5 - 1</a></li>
+                                <li><a href="#">menu5 - 2</a></li>
+                                <li><a href="#">menu5 - 3</a></li>
+                                <li><a href="#">menu5 - 4</a></li>
+                                <li><a href="#">menu5 - 5</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <section>section</section>
+    <footer>footer</footer>
+</body>
+</html>

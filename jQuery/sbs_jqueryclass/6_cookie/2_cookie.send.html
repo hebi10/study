@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cookie send</title>
+    <!-- jQuery cdn -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- jQuery cookie cdn -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        $(document).ready(function(){
+            $('.red').click(function(){
+                $.cookie('CookieColer','red');
+            });
+            $('.blue').click(function(){
+                $.cookie('CookieColer','blue');
+            });
+
+            $('ul li a').click(function(){
+                $.cookie('CookieImg' , $(this).attr('data-cookie'));
+            });
+        });
+    </script>
+    <style>
+        a{text-decoration: none; padding: 5px; display: inline-block; border: 1px solid black;}
+        ul li{font-size: 50px; list-style: none;}
+        a{padding: 5px 30px;}
+    </style>
+</head>
+<body>
+    <a class="red" href="3_cookie_receive.html">red 쿠키 보내기</a>
+    <a class="blue" href="3_cookie_receive.html">blue 쿠키 보내기</a>
+
+    <ul>
+        <li><a href="4_cookie.receive.html" data-cookie="1">1</a></li>
+        <li><a href="4_cookie.receive.html" data-cookie="2">2</a></li>
+        <li><a href="4_cookie.receive.html" data-cookie="3">3</a></li>
+        <li><a href="4_cookie.receive.html" data-cookie="4">4</a></li>
+        <li><a href="4_cookie.receive.html" data-cookie="5">5</a></li>
+    </ul>
+</body>
+</html>

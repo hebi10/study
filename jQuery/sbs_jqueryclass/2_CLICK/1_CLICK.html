@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>click</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script> -->
+    <script>
+        // var sungEun = '김성은';
+        // console.log(window);
+
+        /* 
+            jQuery effect
+            $("선택자").addClass() -  class 추가
+            $("선택자").removeClass() - class 제거
+            $("선택자").hasClass()    - class 가지고 있으면 true , 가지고 있지 않으면 false
+            $("선택자").toggleClass() - class가 있으면 제거 , class가 없으면 추가
+
+         */
+        
+         $(document).ready(function(){
+            $('button').click(function(){
+                alert();
+            });
+         })
+    </script>
+    <style>
+        *{margin: 0; padding: 0;}
+
+        button.active{
+           color: red;
+        }
+     
+    </style>
+</head>
+<body>
+    <button>경고창</button>
+</body>
+</html>

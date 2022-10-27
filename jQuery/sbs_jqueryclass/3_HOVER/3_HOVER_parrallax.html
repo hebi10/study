@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3_HOVER_parrallax</title>
+    <!-- <link rel="stylesheet" href="../css/global.css"> -->
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        
+    </script>
+    <style>
+        *{margin: 0; padding: 0;}
+        /* 전체 */
+        html,body{
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        ul{margin: 0; padding: 0;}
+        ul li{
+            list-style: none;
+        }
+        a{
+            display: block;
+            color: black;
+        }
+        a:hover{
+            color: red;
+        }
+
+        /* 헤더 */
+        header{
+            height: 100vh;
+            font-size: 0;
+            background-color: beige;
+            /* background-color: lemonchiffon; */
+        }
+        header h1{
+            font-size: 30px;
+            margin-top: 15px;
+        }
+        
+        .menuArea{
+            margin: 0 auto;
+            max-width: 1320px;
+        }
+
+        /* ul li */
+        header nav ul li a{
+            font-size: 20px;
+            text-decoration: none;
+        }
+        /* header nav ul li ul{display: none;} */
+        .menuArea div{
+            width: 100%;
+            height: 300px;
+            background-color: white;
+        }
+        .menuArea div h1{float: left;}
+        .menuArea div nav{float: right;}
+        .menuArea div::after{
+            content: '';
+            visibility: hidden;
+            display: block;
+            clear: both;
+        }
+
+        nav>ul>li{float: left; text-align: center;}
+        nav>ul::after{
+            content: '';
+            visibility: hidden;
+            display: block;
+            clear: both;
+        }
+
+        .menuArea div nav>ul>li{
+            margin-top: 20px;
+        }
+
+        .menuArea div nav>ul>li:not(:nth-last-child(1)){
+            margin-right: 20px;
+        }
+
+        .menuArea div nav>ul>li ul{
+            margin-top: 30px;
+        }
+
+        /* section, footer */
+        section,footer{
+            font-size: 100px;
+            color: white;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        section{
+            height: 100vh;
+            background-color: lightblue;
+        }
+        footer{
+            height: 100vh;
+            background-color: lightgreen;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <header>
+            header
+            <div class="menuArea">
+                <div>
+                    <h1>LOGO</h1>
+                    <nav>
+                        <ul>
+                            <li><a href="#">menu1</a>
+                                <ul>
+                                    <li><a href="#">menu1 - 1</a></li>
+                                    <li><a href="#">menu1 - 2</a></li>
+                                    <li><a href="#">menu1 - 3</a></li>
+                                    <li><a href="#">menu1 - 4</a></li>
+                                    <li><a href="#">menu1 - 5</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">menu2</a>
+                                <ul>
+                                    <li><a href="#">menu2 - 1</a></li>
+                                    <li><a href="#">menu2 - 2</a></li>
+                                    <li><a href="#">menu2 - 3</a></li>
+                                    <li><a href="#">menu2 - 4</a></li>
+                                    <li><a href="#">menu2 - 5</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">menu3</a>
+                                <ul>
+                                    <li><a href="#">menu3 - 1</a></li>
+                                    <li><a href="#">menu3 - 2</a></li>
+                                    <li><a href="#">menu3 - 3</a></li>
+                                    <li><a href="#">menu3 - 4</a></li>
+                                    <li><a href="#">menu3 - 5</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">menu4</a>
+                                <ul>
+                                    <li><a href="#">menu4 - 1</a></li>
+                                    <li><a href="#">menu4 - 2</a></li>
+                                    <li><a href="#">menu4 - 3</a></li>
+                                    <li><a href="#">menu4 - 4</a></li>
+                                    <li><a href="#">menu4 - 5</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">menu5</a>
+                                <ul>
+                                    <li><a href="#">menu5 - 1</a></li>
+                                    <li><a href="#">menu5 - 2</a></li>
+                                    <li><a href="#">menu5 - 3</a></li>
+                                    <li><a href="#">menu5 - 4</a></li>
+                                    <li><a href="#">menu5 - 5</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+        <section>
+            section
+        </section>
+        <footer>
+            footer
+        </footer>
+    </div>
+</body>
+</html>

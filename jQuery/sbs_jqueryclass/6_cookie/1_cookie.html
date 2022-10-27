@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cookie</title>
+    <!-- jQuery cdn -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- jQuery cookie cdn -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        $(document).ready(function(){
+            /* 
+            $.cookie()
+
+            $.cookie('name')                                                               
+            ->name에 들어가 있는 value 값을 가져온다.
+
+            $.cookie('name', 'value')                                                       
+            ->name에 value 값을 넣는다.
+
+            $.cookie('name', 'value',{expires : 시간})                                      
+            ->해당 시간동안만 cookie가 존재한다. (1 = 하루 , 1 / 24 / 60 = 1분)
+
+            $.cookie('name', 'value',{expires : 시간 , path : '/6_cookie'})                 
+            ->해당 경로에 맞는 html 에서만 쿠키가 존재한다. ('/6_cookie')
+
+            $.removeCookie('name')                                                          
+            ->해당 name의 cookie를 제거한다.
+            */
+
+            $('.create').click(function(){
+                $.cookie('test','value',{expires : 1 , path : '/6_cookie'});
+            });
+            $('.remove').click(function(){
+                $.removeCookie('test');
+            });
+            $('.confirm').click(function(){
+                console.log(
+                    $.cookie('test')
+                );
+            });
+        })
+    </script>
+</head>
+<body>
+    <button class="create">쿠키 생성</button>
+    <button class="remove">쿠키 제거</button>
+    <button class="confirm">쿠키 확인</button>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script>
+       $(document).ready(function(){
+            $('.btn01').click(function(){
+                $('.popup01').addClass('active');
+            });
+            $( '.popup01 , .popup01 > div [class |= "material-icons"]').click(function(){
+                $('.popup01').removeClass('active');
+            })
+
+            $('.popup01' + ' > div').click(function(e){
+                e.stopPropagation();
+            })
+
+        })
+    </script>
+
+    <style>
+        [class |= 'material-icons']{font-family: 'Material Icons'; color: white; font-size: 30px;}
+        [class ^= 'popup']{position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); display: none; justify-content: center; align-items: center;}
+        [class ^= 'popup'].active{display: flex;}
+        [class ^= 'popup'] > div{background-color: white; width: 50%; height: 50%; font-size: 30px; position: relative; display: flex; justify-content: center; align-items: center; }
+        [class ^= 'popup'] > div [class |= 'material-icons']{position: absolute; right: 0; top: -30px; cursor: pointer;}
+    </style>
+</head>
+<body>
+    <button class="btn01">첫번째 popup</button>
+    <button class="btn02">두번째 popup</button>
+    <div class="popup01">
+        <div>
+            첫번째
+        </div>
+    </div>
+    <div class="popup02">
+        <div>
+            두번째
+        </div>
+    </div>
+</body>
+</html>

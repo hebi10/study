@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>햄버거 버튼</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function(){
+            $('.menu1').click(function(){
+                $('span').toggleClass('active');
+            });
+        })
+    </script>
+    <style>
+        html , body , .wrap{height: 100%;}
+        .wrap{display: flex; justify-content: center; align-items: center;}
+        .wrap div:not(:last-child){margin-right: 50px;}
+        .wrap div{width: 50px; cursor: pointer;}
+        .wrap div span{display: block; height: 5px; background-color: black; transition-duration: 0.5s; transition-property: transform ,opacity;}
+        .wrap div span:not(:last-of-type){margin-bottom: 10px;}
+
+        .menu1 span.active:nth-child(1){transform: translateY(15px) rotate(45deg);}
+        .menu1 span.active:nth-child(2){opacity: 0;}
+        .menu1 span.active:nth-child(3){transform: translateY(-15px) rotate(135deg);}
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="menu1">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</body>
+</html>

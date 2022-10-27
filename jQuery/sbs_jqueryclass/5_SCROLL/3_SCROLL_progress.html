@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCROLL_progress</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../css/global.css">
+    <script>
+        $(document).ready(function(){
+            var test01 = ($(window).scrollTop()/($(document).height() - $(window).height())) * 100;
+            // console.log(test01);
+            $(window).scroll(function(){
+                var test01 = ($(window).scrollTop()/($(document).height() - $(window).height())) * 100;
+                $('.progressBar > div').css({
+                    'width' : test01+'%'
+                })
+            });
+
+            $('.progressBar').click(function(e){
+                var test02 = (e.clientX/$('.progressBar').width())*100;
+                var test03 = (e.clientX/$('.progressBar').width())*($(document).height() - $(window).height());
+                // var test02 = $('.progressBar div').width() / $('.progressBar').width()
+                // console.log(test02);
+                $('.progressBar > div').css({
+                    'width' : test02+'%'
+                });
+
+                $(window).scrollTop(test03);
+                // $(window).scrollTop(test01+'%');
+            });
+        });
+    </script>
+    <style>
+        .progressBar{position: fixed; top: 0; left: 0; height: 10px; width: 100%; background-color: gray;}
+        .progressBar > div{ height: 100%; background-color: hotpink; width: 0;}
+    </style>
+</head>
+<body>
+    <div class="progressBar">
+        <div></div>
+    </div>
+    <header>
+        header
+    </header>
+    <section>
+        section
+    </section>
+    <footer>
+        footer
+    </footer>
+</body>
+</html>

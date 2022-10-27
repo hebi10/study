@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>슬라이딩 메뉴</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>    
+    <script>
+        $(document).ready(function(){
+            $('nav ul li a').hover(function(e){
+                console.log(e.target.offsetLeft)
+                $('#marker').css({
+                    'left' : e.target.offsetLeft,
+                    'width' : e.target.offsetWidth
+                })
+            });
+        });  
+    </script>
+    <style>
+        /* html, body{margin: 0; padding: 0; height: 100%;}
+        nav,ul{height: 100%;}
+        ul{display: flex; justify-content: center; align-items: center;}
+        ul li{list-style: none;}
+        li a{color: black; text-decoration: none; font-size: 32px;}
+        li:not(:nth-last-child(1)){margin-right: 20px;} */
+
+        body{margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh;}
+        ul{margin: 0; padding: 0; list-style: none;}
+        nav{position: relative;}
+        nav ul{display: flex;}
+        nav ul li{margin: 0 20px;}
+        nav ul li a{
+            font-size: 2em; color: black; text-decoration: none;
+        }
+        nav #marker{
+            position: absolute; left: 20px; bottom: 0; color: black; width: 87.64px; height: 4px; background-color: #000;
+            transition-duration: 1s; transition-property: left,width;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div id="marker"></div>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Portfolio</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+</body>
+</html>

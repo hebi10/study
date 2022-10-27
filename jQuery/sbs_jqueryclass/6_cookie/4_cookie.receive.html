@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cookie receive</title>
+    <!-- jQuery cdn -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- jQuery cookie cdn -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        $(document).ready(function(){
+            console.log($.cookie('CookieImg'));
+            var text = [
+                '1번 별',
+                '2번 별',
+                '3번 별',
+                '4번 별',
+                '5번 별'
+            ]
+            if($.cookie('CookieImg') != undefined){
+                $('img').attr('src', 'img/star0'+ $.cookie('CookieImg') + '.png')
+                $('h2').html(text[$.cookie('CookieImg')-1])
+            }
+        })
+    </script>
+</head>
+<body>
+    <div>
+        <img src="https://via.placeholder.com/150" alt="">
+        <h2>쿠키값이 지정되지 않음</h2>
+    </div>
+</body>
+</html>
