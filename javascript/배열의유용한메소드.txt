@@ -90,6 +90,28 @@ spread operator(전개연산자)는 배열이나 객체에서 element들을 꺼�
 --------------- 4. array.slice
 - slice()** **메서드는 어떤 배열의 begin부터 end까지(end 미포함)에 대한 얕은 복사본을 새로운 배열 객체로 반환합니다. 원본 배열은 바뀌지 않습니다.
 
+const animals = ['ant', 'bison', 'camel', 'duck', 'elephant'];
+
+console.log(animals.slice(2)); // 2번 부터(0, 1 빼고 복사)
+// expected output: Array ["camel", "duck", "elephant"]
+
+console.log(animals.slice(2, 4)); // 2번 부터 3까지 (2, 3)
+// expected output: Array ["camel", "duck"]
+
+console.log(animals.slice(1, 5));
+// expected output: Array ["bison", "camel", "duck", "elephant"]
+
+console.log(animals.slice(-2));
+// expected output: Array ["duck", "elephant"]
+begin index나 end index가 음수이면,
+배열의 끝에서부터의 길이를 나타냅니다.
+
+console.log(animals.slice(2, -1));
+// expected output: Array ["camel", "duck"]
+
+console.log(animals.slice());
+// expected output: Array ["ant", "bison", "camel", "duck", "elephant"]
+
 --------------- 5. array.find
 
 
