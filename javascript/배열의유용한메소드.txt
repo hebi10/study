@@ -75,7 +75,7 @@ document.write('reverse : ' + reverse); // reverse : Orange,Banana,Apple
 
 // reverse() 함수 - 원본 배열 유지하기
 const arr = ['Apple', 'Banana', 'Orange']; // arr : Apple,Banana,Orange
-const reverse = [...arr].reverse(); // 배열 거꾸로 // reverse : Orange,Banana,Apple
+const reverse = [...arr].reverse(); // reverse : Orange,Banana,Apple
 
 // 결과 출력
 document.write('arr : ' + arr);
