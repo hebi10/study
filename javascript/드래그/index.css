@@ -27,4 +27,5 @@ span {
   top: 0;
   left: 0%;
   transform: translateX(-50%);
+  border-radius: 25px;
 }
