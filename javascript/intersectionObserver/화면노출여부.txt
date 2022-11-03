@@ -1,0 +1,38 @@
+### Intersection Observer 정리하기
+- 알려주는 사이트
+https://pks2974.medium.com/intersection-observer-%EA%B0%84%EB%8B%A8-%EC%A0%95%EB%A6%AC%ED%95%98%EA%B8%B0-fc24789799a3
+- 실습으로 알려주는 사이트
+https://imkh.dev/js-intersection-observer/
+
+
+// 간단 예제
+const options = { threshold: 1.0 };
+const callback = (entries, observer) => {
+    entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+            observer.unobserve(entry.target);
+            console.log('화면에서 노출됨');
+        } else {
+            console.log('화면에서 제외됨');
+        }
+    });
+}
+const observer = new IntersectionObserver(callback, options);
+observer.observe(
+    document.getElementById('id')
+);
+
+해당 과정을 살펴보면,
+
+1. Intersection Observer 객체를 생성하면서, Callback Function 과 option 을 전달한다.
+2. Intersection Observer 에서 observe 로 구독할 Target Element 를 추가한다.
+3. Target Element 가 options.threshold 로 정의한 Percent(%) 만큼 화면에 노출 혹은 제외 되면, entries 배열 에 추가하고, Callback Function 을 호출한다.
+4. Callback Function 에서 전달 받은 entries 배열을 확인하면서, isIntersecting 으로 노출 여부를 확인한다.
+5. 만약 더이상 Target Element 를 구독할 필요가 없다면, IntersectionObserver 에서 unobserve 로 제거 할 수 있다.
+
+
+
+
+
+
+

@@ -8,16 +8,22 @@ const targetDragBar = dragBar.getBoundingClientRect();
 
 const maxDrag = targetBgBar.width - targetDragBar.width;
 
-bgBar.addEventListener("click", (e) => {
-  // %로 마우스 클릭 위치 계산
-  const width = targetBgBar.width;
-  const mouseX = e.clientX - targetBgBar.left;
-  const mouseClick = (mouseX / width) * 100;
-  console.log();
+bgBar.addEventListener("mousedown", () => {
+  document.addEventListener("mousemove", (e) => {
+    // %로 마우스 클릭 위치 계산
+    const width = targetBgBar.width;
+    let mouseX = e.clientX - targetBgBar.left;
 
-  if (0 < mouseClick < 100) {
-    dragBar.style.left = `${mouseClick}%`;
-  } else {
+    let mouseClick = (mouseX / width) * 100;
+
+    if (mouseClick < 100) {
+      if (0 < mouseClick) {
+        dragBar.style.left = `${mouseClick}%`;
+      }
+    }
+  });
+
+  bgBar.addEventListener("mouseup", () => {
     return;
-  }
+  });
 });
