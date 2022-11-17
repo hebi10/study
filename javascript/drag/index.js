@@ -38,3 +38,29 @@ document.addEventListener("mouseup", () => {
   bgBar.removeEventListener("mousemove", mouseEvent);
   bgBar.removeEventListener("click", mouseEvent);
 });
+
+bgBar.addEventListener(
+  "touchstart",
+  (e) => {
+    const width = targetBgBar.width;
+    let mouseX = e.clientX - targetBgBar.left;
+
+    let mouseClick = (mouseX / width) * 100;
+
+    if (mouseClick < 100) {
+      if (0 < mouseClick) {
+        dragBar.style.left = `${mouseClick}%`;
+      }
+    }
+    bgBar.addEventListener("touchmove", mouseEvent, false);
+  },
+  false
+);
+document.addEventListener(
+  "touchend",
+  () => {
+    bgBar.removeEventListener("touchmove", mouseEvent, false);
+    bgBar.removeEventListener("click", mouseEvent, false);
+  },
+  false
+);
