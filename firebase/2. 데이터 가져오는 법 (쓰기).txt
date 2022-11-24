@@ -1,0 +1,264 @@
+
+오늘의 숙제 :
+
+올리기 버튼을 누르면 유저가 제목, 내용, 가격 인풋에 입력한 정보가
+
+데이터베이스에 저장되어야합니다. 코드 어떻게 짜면 되겠습니까요 
+
+이건 Firebase가 아니라 자바스크립트 실력의 문제입니다. 
+
+ 
+
+ 
+
+ 
+
+오늘은 메인페이지 레이아웃을 완성해보고 데이터베이스에 정보 저장하는 법도 알아봅시다. 
+
+메인페이지 디자인은 제가 미리 해놨습니다. 
+
+index.html 페이지에 들어갈 HTML CSS
+ 
+
+<div class="product"> 부분이 상품1개 레이아웃입니다.
+
+background-image 어쩌구가 상품이미지 넣는 곳인데 그런거 없으니 대충 임시이미지를 넣어봤습니다.
+
+<div class="container mt-3">
+  <div class="product">
+    <div class="thumbnail" style="background-image: url('https://via.placeholder.com/350')"></div>
+    <div class="flex-grow-1 p-4">
+      <h5 class="title">아기다스 신발</h5>
+      <p class="date">2030년 1월 8일</p>
+      <p class="price">20000원</p>
+      <p class="float-end">?0</p>
+    </div>
+  </div>
+</div>
+ 
+
+CSS 파일 하나 만드시고 이거 복붙하셈
+
+그리고 당연히 CSS 파일 쓰려면 index.html 파일에 <link>태그로 첨부하셔야 쓸 수 있겠죠?
+
+.product {
+  display: flex;
+  padding: 10px;
+}
+.thumbnail {
+  max-width: 200px;
+  width: 100%;
+  border-radius: 10px;
+  background-size: cover;
+  background-position: center;
+}
+.product .price {
+  font-size: 16px;
+  font-weight: 600;
+}
+.product .title {
+  font-size: 17px;
+  font-weight: 600;
+}
+.product .date {
+  color: grey;
+  font-size: 13px;
+}
+ 
+
+[collapse]
+ 
+
+실은 글발행기능을 만들 것인데 upload.html 에 들어갈 레이아웃 디자인도 미리해놨습니다.
+
+upload.html 페이지에 들어갈 HTML
+ 
+
+이걸 복붙하면 상품 업로드할 수 있는 폼이 완성됩니다. 
+
+세부디자인은 알아서 하든 하셈 
+
+<div class="container mt-3">
+  <input type="text" class="form-control mt-2" id="title" placeholder="title">
+  <textarea class="form-control mt-2" id="content">content</textarea>
+  <input type="text" class="form-control mt-2" id="price" placeholder="price">
+  <input class="form-control mt-2" type="file" id="image">
+  <button class="btn btn-danger mt-3" id="send">올리기</button>
+</div>
+ 
+
+[collapse]
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+메인페이지에 상품진열하기 
+
+ 
+
+<div class="product"> 부분을 원하는 만큼 복붙하면 상품레이아웃이 이쁘게 생기겠군요.
+
+그럼 이걸 몇번 복붙해야하죠? 지금 Database에 저장된 상품이 2개니까 2번일듯요?
+
+근데 복붙하면 안됩니다.
+
+저장된 상품이 100만개면 어쩔 것임 
+
+이럴 경우가 있어서 보통은 "DB에 있던 문서 갯수만큼 HTML을 복붙해주세요~ " 라고 자바스크립트 코드를 짭니다.
+
+ 
+
+ 
+
+<script>
+  const db = firebase.firestore();
+  db.collection('product').get().then((결과)=>{
+    결과.forEach((doc)=>{
+      console.log(doc)
+      var 템플릿 = `<div>상품임</div>`;
+      $('.container').append(템플릿)
+    })
+  })
+
+</script>
+▲ 저번시간 코드에다가 2줄을 추가했습니다. 
+
+저게 뭐냐면 그냥 자바스크립트 문법으로 <div>한개를 원하는 곳에 꽂아넣는 행위입니다.
+
+저 2줄을 forEach() 안에 썼는데
+
+그러면 forEach() 안의 코드는 Database에 있던 자료 갯수만큼 실행되니까 <div>도 2개 생기겠네요?
+
+이것이 바로 HTML 원하는 만큼 동적으로 생성하는 법입니다. 
+
+ 
+
+근데 지금은 <div>상품임</div> 이렇게 대충 적었는데 이쁜 상품 HTML을 집어넣으시면 메인페이지가 이뻐지겠군요.
+
+이쁜 상품 HTML은 위에 있던 <div class="product"> 부분입니다. 그거 복붙하시면 될듯
+
+알아서 해보시길 바랍니다. 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+알아서 하라면 알아서 안하기 때문에 
+
+ 
+
+보여드려야합니다 이번만 봐드림 
+
+ 
+
+<script>
+  const db = firebase.firestore();
+  db.collection('product').get().then((결과)=>{
+    결과.forEach((doc)=>{
+      console.log(doc)
+      var 템플릿 = `<div class="product">
+      <div class="thumbnail" style="background-image: url('https://via.placeholder.com/350')"></div>
+      <div class="flex-grow-1 p-4">
+        <h5 class="title">${doc.data().제목}</h5>
+        <p class="date">2030년 1월 8일</p>
+        <p class="price">20000원</p>
+        <p class="float-end">?0</p>
+      </div>
+      </div>`;
+      $('.container').append(템플릿)
+    })
+  })
+
+</script>
+▲ 이러면 상품 2개 이쁘게 나옵니다. 
+
+그리고 중간에 제목을 넣고 싶어서 doc.data().제목을 넣어봤는데
+
+자바스크립트에서 `문자` 중간에 변수를 넣고 싶으면 ${변수} 이렇게 쓰시면 됩니다.
+
+가격도 있으면 한번 집어넣어보십시오.
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+상품업로드 페이지 만들기
+
+ 
+
+upload.html을 하나 만들어보십시오. (public 폴더 안에 만듭시다)
+
+그리고 index.html에 있던걸 다 복붙하신 다음 필요없는 코드들은 지웁시다.
+
+당연히 Firebase, Bootstrap, jQuery 설치파일은 지우면 안됩니다. 
+
+그리고 상단에 있는 HTML 레이아웃을 복붙하면 상품 업로드페이지 완성입니다.
+
+
+Firestore 데이터베이스에 정보저장하려면
+
+ 
+
+const db = firebase.firestore();
+db.collection('product').doc('상품3').set({ 제목 : '변기' })
+이런 식으로 작성합니다. 
+
+db.collection('product') 원하는 컬렉션을 선택하고 
+
+doc('상품3') 이런 이름의 문서하나 만들어주시고
+
+set({ 제목 : '변기' }) 이거 저장해주세요
+
+라고 썼습니다. 이거 저장하고 새로고침하면 진짜로 변기가 저장됩니다. 끝 
+
+
+const db = firebase.firestore();
+db.collection('product').add({ 제목 : '변기' })
+혹은 이런 식으로 작성합니다. 
+
+그냥 add() 만 쓰시면 자료를 저장할 수 있는데 이 경우 document의 이름은 자동으로 부여됩니다.
+
+보통 자동으로 부여해주는 add를 즐겨 사용합니다.
+
+상품1,2,3 이렇게 언제 이름붙이고 앉아있음 
+
+그럼 오늘의 숙제나 해보도록 합시다.
+
+오늘의 숙제 :
+
+올리기 버튼을 누르면 방금만든 제목, 내용, 가격 인풋에 입력한 정보가
+
+데이터베이스에 저장되어야합니다. 코드 어떻게 짜면 되겠습니까
+
+이건 자바스크립트 실력의 문제라 혼자 코드를 못짠다면 자바스크립트 공부가 필요한 시점입니다. 
+
+
+(참고)
+
+브라우저의 geolocation API 이런걸 찾아보면 현재 유저의 위도와 경도를 알 수 있습니다.
+
+이 정보를 게시물에 함께 저장하면 나중에 위치가 가까운 게시물만 보여줄 수 있고 그럴 수 있습니다. 
