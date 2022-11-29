@@ -1,0 +1,112 @@
+가입할 때 이름도 함께 저장하려면
+
+createUserWithEmailAndPassword().then() 안에다가 이런 함수를 쓰면 됩니다. 
+
+result.user.updateProfile( {displayName : '홍길동'} )
+프로필 업데이트시엔 result 라는 곳에 저장된 updateProfile() 함수 쓰라고 되어있습니다. 
+
+updateProfile() 안에 업데이트할 유저정보를 object 자료형으로 기입하십시오.
+
+그니까 우리가 짰던 코드는 이렇게 되겠네요 
+
+$('#register').click(function(){
+  
+  var 이메일 = $('#email-new').val();
+  var 패스워드 = $('#pw-new').val();
+  var 이름 = $('#name-new').val();
+
+  firebase.auth().createUserWithEmailAndPassword(이메일, 패스워드).then((result)=>{
+    console.log(result.user)
+    result.user.updateProfile( {displayName : 이름} )
+  })
+})
+jQuery 셀렉터로 유저가 기입한 이름을 찾고
+
+그걸 updateProfile() 안에 기입했습니다.
+
+이제 가입완료시 이름도 저장해줍니다. 끝
+
+로그인기능 만들기
+
+이번엔 가입말고 로그인기능을 만들건데 로그인할 레이아웃이 필요합니다. 
+
+HTML 몇개 좀 집어넣읍시다. 그냥 가입하던 HTML 그대로 복사해서 쓰면 될듯
+
+<div class="container mt-3">
+    <div class="mb-3">
+      <input type="email" class="form-control" placeholder="email" id="email">
+    </div>
+    <div class="mb-3">
+      <input type="password" class="form-control" placeholder="pw" id="pw">
+    </div>
+    <button type="submit" class="btn btn-primary" id="login">로그인하기</button>
+ </div>
+그래서 있던 HTML 복사했습니다.  
+
+그리고 id="" 이거 전부 바꿨습니다. HTML의 id속성은 중복되면 큰일남 
+
+Firebase Authentication을 이용해서 로그인하시려면 
+
+firebase.auth().signInWithEmailAndPassword(abc@naver.com, 123456)
+이렇게 쓰라는데얌 긴 함수에 이메일, 비번 넣으면 로그인시켜준다고 합니다.
+
+그럼 님들이 짤 코드는 이게 끝인듯
+
+1. 로그인버튼을 누르면
+
+2. 사용자가 입력한 아이디, 비번을 저 함수에 넣기
+
+저번시간에도 해본거라 알아서 해보고 눌러봅시다
+ 
+$('#login').click(function(){
+  
+  var 이메일 = $('#email').val();
+  var 패스워드 = $('#pw').val();
+
+  firebase.auth().signInWithEmailAndPassword(이메일, 패스워드).then((result)=>{
+    console.log(result.user)
+  })
+})
+ 
+저는 이렇게 짰다고 합니다.
+
+로그인버튼 누르면 result안에 담긴 유저정보가 출력되면 성공입니다.
+
+이제 유저는 로그인된 상태인 것임
+
+[collapse]
+ 
+로그인된 사람만 상품업로드할 수 있게 막기
+
+백엔드에서 어떻게 하냐면
+
+DB 접속규칙 페이지에서 그냥 명령을 이렇게 주면 되는데
+
+"로그인된 사람만 document 생성이 가능하게 해주세요"
+
+▲ Firebase 콘솔의 Firestore Database 규칙란에 이렇게 코드 작성하면 됩니다. 
+
+혹은 request.auth.uid != null 뭐 이렇게 작성해도 괜찮을듯요
+
+request라는 변수는 지금 Database에 접근하는 유저의 정보를 꺼내볼 수 있고
+
+그 중에 .auth라는게 인증정보입니다.
+
+로그인이 되어있으면 거기 안에 뭐가 들어있기 때문에 != null 이걸로 비교하면 로그인 되어있는지 확인가능
+
+Q. 프론트엔드에선 어떻게 막나요
+
+A. 다음에 해볼 것임 
+
+로그아웃 기능 만들기
+
+이것도 역시 firebase.auth().signOut() 이라는 함수 가져다쓰면 됩니다.
+
+그래서 로그아웃 버튼을 만들고 싶으면 대충 이런식이겠군요.
+
+<button id="logout">로그아웃</button>
+<script>
+  $('#logout').click(function(){
+    firebase.auth().signOut()
+  })
+</script>

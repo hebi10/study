@@ -3,33 +3,17 @@
 
 index.html 메인페이지에 상품 이미지도 잘 보여주도록 코드짜오십시오.
 
- 
-
- 
-
- 
-
 Firebase 쓰시면 가입기능에 대한 이해 그런거 필요없이
 
 그냥 다짜고짜 회원가입기능을 만들 수 있습니다.
 
 저번시간에 이미지 업로드한걸 DB에 저장하는 것부터 마무리해보도록 합시다. 
 
- 
-
- 
-
- 
-
 이미지업로드 성공시/실패시 뭔가 코드를 실행하려면
-
- 
 
 하단과같은 코드를 작성합니다.
 
 그냥 Firebase Storage 사용법일 뿐이라 복붙만 합시다. 
-
- 
 
 업로드작업.on( 'state_changed', 
     // 변화시 동작하는 함수 
@@ -46,7 +30,6 @@ Firebase 쓰시면 가입기능에 대한 이해 그런거 필요없이
     }
 );
  
-
 업로드작업.on( 'state_changed') 이걸 붙이면 파일 업로드작업 중간에 뭔가 실행이 가능한데
 
 파라미터로 3개까지 함수를 추가할 수 있습니다.
@@ -59,10 +42,6 @@ Firebase 쓰시면 가입기능에 대한 이해 그런거 필요없이
 
 실행됩니다. 둘째 셋째만 써봅시다. 
 
- 
-
- 
-
 이미지 업로드가 성공하면 이미지가 저장된 url도 알 수 있는데
 
 그건 업로드작업.snapshot.ref.getDownloadURL() 이렇게 쓰면 알 수 있습니다. 
@@ -73,28 +52,14 @@ Firebase 쓰시면 가입기능에 대한 이해 그런거 필요없이
 
 2. 업로드된 이미지의 url과 함께 DB에 게시물 저장하라고 코드 알아서 짜오십시오. 
 
- 
-
- 
-
- 
-
- 
-
- 
-
 가입기능을 만들기 위해 login.html 만들기
-
  
-
 HTML 파일 하나만 만들어봅시다. 파일명은 login.html 이 어떨까요. 
 
 그리고 기존에 있던 html파일에 있던 내용을 그대로 복붙하고 필요없는거 지웁시다.
 
 그리고 가입 폼 디자인이 필요한데 그건 만들어왔습니다.
-
  
-
 <div class="container mt-3">
     <div class="mb-3">
       <input type="text" class="form-control" placeholder="name" id="name-new">
@@ -108,26 +73,12 @@ HTML 파일 하나만 만들어봅시다. 파일명은 login.html 이 어떨까�
     <button type="submit" class="btn btn-primary" id="register">가입하기</button>
  </div>
 이거 복붙하면 이름, 이메일, 패스워드 입력란이 이쁘게 생깁니다. 디자인 끝
-
  
-
- 
-
- 
-
- 
-
- 
-
 Firebase 회원가입기능 만들고싶으면 
-
  
-
 firebase.auth().createUserWithEmailAndPassword(abc@naver.com, 123456)
 이거 한줄쓰면 됩니다.
-
  
-
 소괄호안에 유저가 입력한 이메일, 패스워드를 입력하면 계정 만들어줍니다.
 
 그래서 님들이 짤 코드는 이게 끝입니다. 
@@ -141,12 +92,9 @@ firebase.auth().createUserWithEmailAndPassword(abc@naver.com, 123456)
 자바스크립트 기초 알면 누구나 가능하니까 빨리 알아서 해보십시오. 
 
 JS 기초강의 6강까지 듣고오셔도 알아서 할 수 있을 듯
-
  
-
 저는 어떻게 했냐면
  
-
 $('#register').click(function(){
   
   var 이메일 = $('#email-new').val();
@@ -164,14 +112,7 @@ jQuery 셀렉터로 요소를 찾고 .val() 이라고 입력하면 인풋에 입
 
 콘솔창에 출력도 해봤습니다 심심해서 
 
- 
-
- 
-
 [collapse]
- 
-
- 
 
 오늘의 상식 : 
 

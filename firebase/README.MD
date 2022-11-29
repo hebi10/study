@@ -65,6 +65,7 @@ projectId: "test-78694",
 
 firebase.initializeApp(firebaseConfig);
 export const db = firebase.firestore();
+
 아무데나 입력합니다. 파이어베이스 콘솔에 있던 SDK 설정 내용이 뭐냐면 하단이나 위의 영상을 참고합니다.
 [프로젝트 설정 -> 개발 아이콘 클릭 생성 -> SDK 설정 및 구성 -> 구성 부분]
 
