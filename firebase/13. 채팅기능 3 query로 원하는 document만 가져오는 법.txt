@@ -1,0 +1,242 @@
+
+오늘은 chat.html 디자인해보고
+
+'내가 속한 채팅방목록'을 DB에서 뽑아서 보여주도록 합시다. 
+
+ 
+
+ 
+
+chat.html 디자인
+ 
+
+채팅방과 채팅내용 레이아웃은
+
+<div class="container p-4 detail">
+    <div class="row">
+      <div class="col-3 p-0">
+        <ul class="list-group chat-list">
+          <li class="list-group-item">
+            <h6>채팅방1</h6>
+            <h6 class="text-small">채팅방아이디</h6>
+          </li>
+        </ul>
+      </div>
+      <div class="col-9 p-0">
+        <div class="chat-room">
+          <ul class="list-group chat-content">
+            <li><span class="chat-box">채팅방1 내용</span></li>
+            <li><span class="chat-box">채팅방1 내용</span></li>
+            <li><span class="chat-box mine">채팅방1 내용</span></li>
+          </ul>
+          <div class="input-group">
+            <input class="form-control" id="chat-input">
+            <button class="btn btn-secondary" id="send">전송</button>
+          </div>
+        </div>
+      </div>
+    </div>
+ </div> 
+ 
+
+CSS는 
+
+.chat-content {
+  height: 450px;
+  overflow-y: scroll;
+  padding: 10px;
+}
+.chat-content li {
+  margin-top: 10px;
+}
+.text-small {
+  font-size: 12px;
+  color: gray;
+  margin-bottom: 0;
+}
+.chat-box {
+  background: #eee;
+  padding: 5px;
+  border-radius: 5px;
+  float: left;
+}
+.mine {
+  float: right;
+}
+ 
+
+ 
+
+ 
+
+ 
+
+[collapse]
+ 
+
+ 
+
+ 
+
+ 
+
+chat.html 방문시 채팅방 목록을 보여줍시다
+
+ 
+
+내가 속한 채팅방목록을 찾아서 왼쪽에 박스로 띄우자는 겁니다. 
+
+그니까 DB에다가 이런 요청을 주면 되겠군요.
+
+"chatroom 컬렉션에서 내 uid가 포함되어있는 document를 다 가져와"
+
+모든 document를 가져오는건 .get().then() 쓰면 되는데 저렇게 조건부로 가져오는 법은 배운 적이 없습니다.
+
+그건 어떻게 하냐면 
+
+ 
+
+db.collection('chatroom').where('필드', '==', '값').get().then(()=>{
+  
+})
+where() 이거 쓰시면 되는데 3개의 파라미터를 입력가능합니다.
+
+1. 필드 (who, product 같은 자료의 제목)
+
+2. 연산자 (등호 부등호 등)
+
+3. 자료의 값 
+
+채워주시면 되는데 예를 들어서 
+
+where('product', '==', '고구마')
+
+이렇게 쓰면 product : 고구마가 저장되어있는 document를 전부 가져옵니다.
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+array 자료에 있는지 확인하고 싶은 경우엔
+
+db.collection('chatroom').where('who', 'array-contains', '내uid').get().then(()=>{
+  
+})
+array-contains 연산자를 쓰면 됩니다.
+
+그러면 who 필드에 '내uid'가 array 자료로 저장되어있는지 확인해줍니다. 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+chatroom 컬렉션에서 내 uid가 포함되어있는 document를 다 가져와
+
+ 
+
+그러고 싶다면 chat.html에 이렇게 코드를 짭니다.
+
+var 내uid = JSON.parse( localStorage.getItem('user') ).uid
+
+db.collection('chatroom').where('who', 'array-contains', 내uid).get().then((result)=>{
+  result.forEach((a)=>{
+    console.log(a.data())
+  })
+})
+1. 내uid를 localStorage에서 뽑아왔습니다.
+
+2. where() 함수를 이용해 쿼리를 줬습니다.
+
+3. get().then() 해준건 항상 forEach()를 쓰면 하나씩 출력가능합니다.
+
+그럼 진짜 내가 속한 채팅방 document 다 가져옴
+
+DB에서 가져온 채팅방 목록을 HTML로 보여주기
+
+▲ 고구마, 돼지감자 채팅방을 찾아왔다면 저렇게 HTML로 보여주자는 겁니다.
+
+그럼 저거 박스 하나가 어떻게 생겼는지 잘 조사한 다음
+
+JS로 저거 많이 만들어달라고 명령을 주면 되겠군요.
+
+아무튼 HTML 생성하는 법은 여러번 해봤으니 설명은 생략하도록 합시다. 
+
+ 
+
+var 내uid = JSON.parse( localStorage.getItem('user') ).uid
+
+db.collection('chatroom').where('who', 'array-contains', 내uid).get().then((result)=>{
+  result.forEach((a)=>{
+    var template = `<li class="list-group-item">
+            <h6>${a.data().product}</h6>
+            <h6 class="text-small">${a.id}</h6>
+          </li>`
+    $('.chat-list').append(template)
+  })
+})
+<li class="list-group-item"> 이걸 여러개 만들어달라고 했습니다.
+
+근데 그 안에 채팅방 제목 이런거 넣어달라고 했습니다. 
+
+아무튼 이제 새로고침 하면 채팅방 목록 잘 보임 
+
+where 쿼리 문법 추가
+
+ 
+
+.where('product', 'in', ['고구마', '돼지감자'])
+두개 이상의 단어를 검색한 결과를 가져오고 싶으면 [ ] 안에 담습니다.
+
+그리고 in 연산자를 쓰면 됩니다.
+
+ 
+
+ 
+
+.where('array필드', 'array-contains-any', ['고구마', '돼지감자'])
+두개 이상의 단어를 array가 담긴 필드에서 검색한 결과를 가져오고 싶으면 [ ] 안에 담습니다.
+
+그리고 array-contains-any 연산자를 쓰면 됩니다. 
+
+ 
+
+ 
+
+.where(['who', 'product'], '==', '고구마')
+두개 이상의 필드에서 동시에 검색은 안됩니다.
+
+db.collection().where() 이걸 두 번 쓰든 그러셔야함
+
+다음시간 예고 : 
+
+이제 메세지 전송을 누르면 메세지를 저장할 겁니다.
+
+근데 메세지라 뭐랬습니까. 그냥 게시물들이랑 똑같다고 보면 됩니다.
+
+그래서 전송버튼 누르면 DB에 저장시키면 되는데
+
+Q. 어디다 저장할 것임?
+
+A. 채팅방 document의 서브 collection을 만들어서 거기 저장하면 됩니다. 
+
+ 
+
+직관적으로 알아서 할 수 있을 것 같은데 자신있으면 해보시고
+
+싫으면 다음강의로 넘어갑시다. 
+
+ 

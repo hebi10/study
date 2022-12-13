@@ -1,0 +1,330 @@
+
+오늘의 숙제 : 
+
+1. 채팅버튼 누르면 chat.html로 이동해야합니다.
+
+2. chat.html 디자인 알아서 해오십시오 위 사진처럼 생기면 될듯요?
+
+디자인을 못하는 똥손이면 그래도 시도는 해보셈 
+
+ 
+
+ 
+
+ 
+
+저번시간에 채팅방 만들어오라던 숙제를 해보도록 합시다.
+
+채팅방 구성원들의 uid가 DB에 아무튼 들어가있기만 하면 숙제 성공이지만
+
+who : [ 참여자1uid, 참여자2uid .. ] 
+
+이런 식으로 array자료로 한번에 저장시키는 것으로 바꿔보도록 합시다. 
+
+안그러면 나중에 찾을 때 힘들듯
+
+이것만 잘 충족하면 그냥 다음강의 넘어가셔도 될듯요 
+
+ 
+
+ 
+
+ 
+
+ 
+
+시작하기 전에 새로운 계정으로 깔끔하게 상품올리고 시작
+
+ 
+
+왜냐면 기능들이 많이 업데이트되어서
+
+깔끔한 마음으로 가입 & 상품업로드 해볼 것임
+
+님들도 따라하셔도 될듯요
+
+1. goguma@naver.com 계정으로 가입합니다.
+
+2. goguma@naver.com 계정으로 로그인합니다.
+
+3. upload.html 페이지에서 고구마 상품을 업로드합니다.
+
+4. 고구마계정에서 로그아웃 후 kim@naver.com 이나 아무튼 다른 계정으로 로그인합니다.
+
+ 
+
+이제 kim@naver.com 계정으로 고구마 상품에다가 채팅을 걸어보는 상황에서 코드를 짜보도록 합시다.
+
+ 
+
+ 
+
+ 
+
+ 
+
+채팅버튼을 누르면 채팅방 게시물 발행하기
+
+ 
+
+라는 저번시간 숙제를 해보도록 합시다. 
+
+detail.html에 채팅버튼 만들었었죠? 그 밑에 코드짜면 되겠군요.
+
+ 
+
+$('#chat').click(function(){
+  var 데이터 = {
+    from : 내uid,
+    to : 판매자uid,
+    product : 상품명,
+    date : new Date()
+  }
+  db.collection('chatroom').add(데이터)
+})
+이러면 버튼 눌렀을 때 데이터를 이쁘게 만들어서 chatroom 컬렉션에 저장해줍니다. 
+
+ 
+
+이제 데이터안에 uid 저런거 채우면 되겠는데요
+
+저런거 어디있음요?
+
+ 
+
+내 uid는 로컬스토리지에 있는 것 같은데얌
+ 
+
+var 내uid = JSON.parse( localStorage.getItem('user') ).uid;
+
+$('#chat').click(function(){
+  var 데이터 = {
+    from : 내uid,
+    to : 판매자uid,
+    product : 상품명,
+    date : new Date()
+  }
+  db.collection('chatroom').add(데이터)
+})
+이localStorage에 있는 user라고 저장한걸 꺼내오면 거기 있을 듯 합니다.
+
+근데 저장했을 때 문자화해서 저장했기 때문에
+
+문자를 다시 object로 바꿔줘야합니다. 그래야 .uid 뭐 이런식으로 안에 들어있는 것을 출력할 수 있으니까요.
+
+JSON.parse() 이게 문자를 object로 다시 바꿔주는 함수입니다.
+
+그럼 이제 판매자 uid는 어디있죠?
+
+ 
+
+ 
+
+[collapse]
+ 
+
+판매자uid 는 하단에 있는 것 같은데얌
+ 
+
+var 내uid = JSON.parse( localStorage.getItem('user') ).uid;
+
+$('#chat').click(function(){
+  var 데이터 = {
+    from : 내uid,
+    to : 판매자uid,
+    product : 상품명,
+    date : new Date()
+  }
+  db.collection('chatroom').add(데이터)
+})
+
+
+db.collection('product').doc(쿼리스트링.get('id')).get().then((result)=>{
+  
+  result.data().uid 
+
+  긴 코드~~
+})
+ 
+
+밑에 상품 데이터꺼내오는 부분이 있는데
+
+상품데이터 중에 올린사람 uid 기록되어있을 걸요
+
+그래서 result.data().uid 라고 쓰면 꺼내지는데 그걸 저 위에 판매자uid 란에 어떻게 박아넣습니까.
+
+자바스크립트 변수는 함수를 벗어나면 없다고 나오기 때문에 그냥 복붙할 수도 없습니다.
+
+ 
+
+해결책 1. $('#chat').click() 이거 전체 코드를 result.data().uid 근처로 옮기면 변수 사용가능할듯
+
+해결책 2. 변수를 함수 바깥에 만들어두면 될듯 왜냐면 함수 바깥에서 만든 변수는 함수 안에서 자유롭게 사용이 가능합니다. (그 역이 안되는 것일 뿐)
+
+귀찮으니 2번을 골랐습니다.
+
+ 
+
+ 
+
+ 
+
+var 내uid = JSON.parse( localStorage.getItem('user') ).uid;
+
+$('#chat').click(function(){
+  var 데이터 = {
+    from : 내uid,
+    to : 판매자uid,
+    product : 상품명,
+    date : new Date()
+  }
+  db.collection('chatroom').add(데이터)
+})
+
+var 판매자uid;
+
+db.collection('product').doc(쿼리스트링.get('id')).get().then((result)=>{
+  
+  판매자uid = result.data().uid 
+
+  긴 코드~~
+})
+1. 바깥에 판매자uid 라는 변수를 만들었습니다. 그럼 이제 함수 안에서 아무데서나 사용가능
+
+2. result.data().uid를 판매자uid 변수안에 집어넣음 (가능)
+
+3. 판매자uid 변수를 아까 원하는 곳에 집어넣음
+
+끝
+
+ 
+
+ 
+
+[collapse]
+ 
+
+상품명도 하단에 있는거 같은데요
+ 
+
+var 내uid = JSON.parse( localStorage.getItem('user') ).uid;
+
+$('#chat').click(function(){
+  var 데이터 = {
+    from : 내uid,
+    to : 판매자uid,
+    product : 상품명,
+    date : new Date()
+  }
+  db.collection('chatroom').add(데이터)
+})
+
+var 판매자uid;
+var 상품명;
+
+db.collection('product').doc(쿼리스트링.get('id')).get().then((result)=>{
+  
+  판매자uid = result.data().uid;
+  상품명 = result.data().제목; 
+
+  긴 코드~~
+})
+아까와 같으니 설명은 생략합니다.
+
+ 
+
+ 
+
+[collapse]
+ 
+
+Permission error 또 뜨는데요
+ 
+
+에러는 놓친부분 알려주는 좋은거지 나쁜게 아닙니다. 
+
+Firestore 콘솔로 가서 chatroom 컬렉션의 접근규칙을 알아서 설정해주시면 됩니다.
+
+ 
+
+[collapse]
+ 
+
+ 
+
+ 
+
+근데 저장할 때 from, to 각각 나누지 말고 array 자료로 한번에 저장하십시오
+
+ 
+
+왜냐면 
+
+from에 내uid가 있으면 가져와줘~ 이런 DB데이터 요청은 가능한데 
+
+from 또는 to에 내 uid가 있으면 전부 가져와줘~ 이런건 못합니다. OR 연산 못함
+
+그래서 그냥 DB에
+
+who : [내uid, 판매자uid]
+
+이런 식으로 한군데 몰아서 저장하자는 겁니다. 이것은 제가 추천하는 방식일 뿐인데 단점이 있다고 생각하면 다르게하셔도 상관없을듯요 
+
+ 
+
+ 
+
+그래서 숙제로 했던 코드를 이렇게 수정했습니다.
+
+ 
+
+$('#chat').click(function(){
+  var 데이터 = {
+    who : [내uid, 판매자uid] ,
+    product : 상품명,
+    date : new Date()
+  }
+  db.collection('chatroom').add(데이터)
+})
+그러면 이제 채팅버튼 누를 때 chatroom에 이런 식으로 데이터가 저장되어있습니다.
+
+저거 이상하게 생긴 0 1 붙은게 array 자료입니다. 
+
+(참고) 자바스크립트의 array 자료는 순서개념이 있습니다.
+
+하지만 Firestore의 array 자료는 순서개념이 없습니다.
+
+내 uid를 앞에 넣었다고 해도 나중에 다시 보면 뒤에 있기도 하고 그렇습니다. 
+
+그래서 순서를 보장해주지 않기 때문에 혹여나 채팅방 만든사람을 구분하고 싶다면
+
+[ { uid : '내uid', 발신자 : true }, { uid : '상대uid', 발신자 : false } ] 
+나중에 array 안에 object 같은걸 만들어서 넣던가 하셔야합니다. 
+
+ 
+
+ 
+
+ 
+
+ 
+
+(응용1) 지금은 채팅 버튼 누를 때마다 채팅방게시물이 생성됩니다.
+
+그러면 안되겠죠? 이미 내uid, 상대방uid가 포함된 게시물이 있으면 새로 만들지 말아달라는 코드는 어떻게 작성하면 될까요
+
+ 
+
+ (응용2) 채팅방 생성 보안은요?
+
+지금 게시물 생성 요청하는 사람의 uid가 게시물에 저장할 uid에 포함되어있으면 만들어주세요라는
+
+규칙은 어떻게 작성하면 될까요?
+
+ 
+
+응용방안들도 한번 생각해봅시다. 
+
+실은 생각해서 안나오는건 검색해야지 생각한다고 나오지 않습니다. 
+
+ 

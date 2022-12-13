@@ -1,0 +1,220 @@
+현재 유저가 로그인했는지 알고싶을 때가 있습니다.
+
+그래야 로그인된 유저의 이름을 어딘가 표시해주거나 그런 기능을 개발할 수 있지 않을까요.
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+유저의 로그인상태 확인하는 코드
+
+ 
+
+firebase.auth().onAuthStateChanged((user)=>{
+  if (user) {
+    console.log(user)
+  }
+})
+Firebase는 그냥 이걸 쓰라고 합니다. 그래서 쓰면 되겠습니다.
+
+이 함수는 유저가 로그인시 / 로그아웃시 / 페이지 새로고침시 동작합니다. 
+
+그래서 페이지내에 넣어두시면 항상 로그인 되었는지 체크할 수 있습니다.
+
+유저가 있으면 user라는 변수에 진짜 {유저정보}가 담겨있습니다. uid, 이메일, 이름 이런거요. 
+
+콘솔창에 유저정보 출력되죠?
+
+안되면 로그인 안되어있는 것임 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+로그인된 유저의 이름을 보여주자
+
+ 
+
+<nav> 태그 안에 로그인된 유저 이름을 보여줍시다. 
+
+그냥 아까 출력해봤던 유저정보에서 이름 뽑아서 HTML에 박아넣으면 되겠죠 뭐 
+
+ 
+
+<span class="ms-auto mx-2" id="userName">유저이름</span>
+
+<script>
+firebase.auth().onAuthStateChanged((user)=>{
+  if (user) {
+    console.log(user)
+    $('#userName').html(user.displayName)
+  }
+})
+</script>
+그냥 jQuery 문법으로 박아넣었음
+
+ 
+
+Q. 근데 새로고침 해보면 좀 늦게바뀌는데요?
+
+A. onAuthStateChanged() 함수는 늦게 실행되는 함수입니다.
+
+Firebase 서버에게 물어보는 함수라 그만큼 시간이 걸려서 그렇습니다. 
+
+그래서 빨리빨리 유저정보를 가져오고 싶으면 저기서 가져온 정보를 localStorage 이런 곳에 저장해서 쓰거나 그러시면 됩니다. 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+▲ 크롬 개발자도구 켜신 후 Application 탭 들어가시면 localStorage라는 곳이 보입니다.
+
+여기가 개발자들이 유저 몰래 응큼한 정보저장하는 곳입니다. 
+
+object 자료처럼 좌측에 이름쓰고 우측에 값넣고 하시면 됩니다.
+
+우리도 유저의 정보를 user : {유저정보}
+
+ 이런 식으로 집어넣는게 어떨까요 
+
+ 
+
+ 
+
+(참고)
+
+Firebase는 사진에 보이는 Indexed DB라는 곳에 이미 유저로그인 정보를 저장하고 있습니다.
+
+거기있는거 뽑아서 쓰셔도 될텐데 문법이 어려울 수 있어서 쉽고 빠르게 쓰려면 localStorage 쓰셈 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+유저몰래 localStorage에 유저정보를 저장합시다 
+
+ 
+
+localStorage.setItem('데이터이름', '데이터')
+localStorage.getItem('데이터이름')
+localStorage.removeItem('데이터이름') 
+각각 localStorage에 데이터 저장, 출력, 삭제 문법입니다.
+
+ 
+
+근데 주의점은 localStorage는 문자데이터만 저장할 수 있어서 {} object 이런건 문자로 바꿔서 넣으셔야합니다.
+
+object 자료를 문자로 바꾸려면 JSON.stringify(오브젝트자료) 여기 넣으면 됩니다.
+
+ 
+
+ 
+
+그래서 유저정보확인한걸 localStorage에 자료 저장하려면
+
+<span class="ms-auto mx-2" id="userName">유저이름</span>
+
+<script>
+firebase.auth().onAuthStateChanged((user)=>{
+  if (user) {
+    console.log(user)
+    localStorage.setItem('user', JSON.stringify(user))
+  }
+})
+</script>
+이러면 진짜 localStorage 들어가보시면 현재 로그인된 유저정보가 저장되어있습니다. 
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+▲ 진짜임
+
+안보이면 오타거나 로그인 안한 것인듯 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+localStorage에서 유저정보 빼서 HTML에 박으려면 
+
+ 
+
+<span class="ms-auto mx-2" id="userName">유저이름</span>
+
+<script>
+
+var 뺀거 = localStorage.getItem('user');
+$('#userName').html(JSON.parse(뺀거.displayName))
+firebase.auth().onAuthStateChanged((user)=>{
+  if (user) {
+    console.log(user)
+    localStorage.setItem('user', JSON.stringify(user))
+  }
+})
+</script>
+1. localStorage에 저장했던 user 라는 정보를 뺍니다.
+
+2. 문자로 저장했기 때문에 그걸 다시 {object} 자료로 변환합니다. (JSON.parse()쓰면 됩니다)
+
+왜 변환하냐고요? 문자화된 object는 .점찍어서 자료 못빼니까 다시 {object}로 변환이 필요합니다.
+
+3. 그거 HTML에 박아넣음 
+
+ 
+
+ 
+
+그러면 이제 새로고침해도 유저정보가 늦게뜨지 않습니다.
+
+ 
+
+ 
+
+알아서 해볼거
+
+- 로그아웃버튼 누르면 localStorage에서 user 데이터 삭제하는게 어떨까요
+
+- 혹은 onAuthStateChanged() 여기서 유저가 없을 때도 localStorage에 있던 user 삭제가 좋아보입니다
+
+- upload.html 페이지에서 로그인된 유저만 글올리기 버튼 누를 수 있게 버튼 감추거나 경고창 띄우거나 하려면?

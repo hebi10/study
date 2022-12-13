@@ -1,0 +1,160 @@
+
+근데 저번시간에 수정기능 알아서 만들어오랬죠?
+
+firestore update 함수라고 잘 찾아보시면 수정도 쉽게 가능합니다. 
+
+아무튼 숙제를 해보도록 합시다.
+
+ 
+
+ 
+
+ 
+
+ 
+
+숙제 1 : 감자 edit 페이지엔 감자 게시물의 내용이 채워져야 
+
+ 
+
+감자 edit 페이지로 방문하면 감자게시물을 <input>에 입력해줘야합니다.
+
+감자 edit 페이지는 /edit.html?id=감자게시물id 이렇게 생겼습니다.
+
+그래서 여러분이 내릴 명령은 이거같은데요 
+
+1. url에 박혀있던 id를 이용해서 DB에서 게시물을 찾아와주세요
+
+2. 그걸 HTML에 꽂아넣어주세요
+
+ 
+
+ 
+
+ 
+
+var 쿼리스트링 = new URLSearchParams(window.location.search);
+
+db.collection('product').doc( 쿼리스트링.get('id') ).get().then((result)=>{
+  console.log(result.data())
+})
+일단 1번을 해결해봤습니다. url에 숨겨져있던 게시물 id로 DB에서 게시물을 찾았습니다.
+
+ 
+
+콘솔창에 출력도 해봄 
+
+ 
+
+ 
+
+ 
+
+var 쿼리스트링 = new URLSearchParams(window.location.search);
+
+db.collection('product').doc( 쿼리스트링.get('id') ).get().then((result)=>{
+  $('#title').val(result.data().제목)
+  $('#content').val(result.data().내용)
+})
+2번을 해결해봤습니다. 
+
+어떤 <input> 태그에 미리 입력된 값을 조작하고 싶으면 
+
+셀렉터로 <input>을 찾은 뒤에 .val('어쩌구') 이렇게 하시면 어쩌구라는 글자가 채워집니다.
+
+그래서 result.data().제목을 채워봤음
+
+나머지 <input>도 알아서 채워봅시다. 
+
+ 
+
+ 
+
+ 
+
+ 
+
+숙제 2 : 수정 버튼누르면 수정되어야
+
+ 
+
+일단 Firestore 안의 document를 수정하고 싶으면 구글님이 이런 함수를 쓰라고 하네요
+
+db.collection('product').doc().update({ 제목 : 123 })
+update() 안에 바꿀 내용을 적으면 됩니다. 
+
+ 
+
+저렇게 적으면 제목 : 123 으로 수정해줄듯
+
+그럼 실제 유저가 <input>에 입력한 값을 update() 에 넣으면 끝 아니겠습니까
+
+ 
+
+ 
+
+ 
+
+ 
+
+var 바꿀거 = {
+  제목 : $('#title').val(),
+  가격 : $('#price').val()
+}
+
+db.collection('product').doc().update(바꿀거)
+그래서 실제 유저가 입력한 값을 update() 에 집어넣으라고 했습니다.
+
+근데 이 코드는 언제 실행이 되어야하죠?
+
+당연히 버튼을 누르면 실행되어야합니다.
+
+ 
+
+ 
+
+$('#send').click(function(){
+  var 바꿀거 = {
+    제목 : $('#title').val(),
+    가격 : $('#price').val() 
+  }
+
+  db.collection('product').doc().update(바꿀거)
+})
+#send라는 버튼 누르면 실행하라고 했습니다.
+
+버튼 누르면 진짜 바뀜 숙제 끝 
+
+ 
+
+ 
+
+ 
+
+ 
+
+본인만 수정가능하게 막으려면?
+
+ 
+
+지금은 개나소나 전부 모든 게시물을 수정가능합니다.
+
+막으려면 방법은 1. 프론트엔드 2. 백엔드가 있는데
+
+ 
+
+1. 프론트엔드에선 그냥
+
+로그인된 유저의 uid == 지금 게시물의 uid 인 경우에만 수정버튼을 노출시키거나 하면 됩니다. 
+
+물론 프론트엔드에 있는 모든건 위조가 가능해서 백엔드가 가장 중요합니다. 
+
+ 
+
+2. 백엔드에선 
+
+수정요청하는사람의 uid == 지금 게시물의 uid 인 경우에만 수정을 허가해주세요~ 라고 규칙을 지정하면 됩니다. 
+
+그건 다음시간에 합시다. 
+
+ 
