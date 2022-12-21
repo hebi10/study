@@ -1,0 +1,275 @@
+
+Functions로 할 수 있는 건
+
+- Firestore create, update, delete, 가입, 로그인, Storage 업로드를 감지할 수 있고
+
+- 그 때 코드를 실행할 수 있습니다. 아무거나요 
+
+ 
+
+그래서 예를 들어서
+
+"누가 Storage에 이미지 올리면 Firestore에 몰래 뭔가 추가해줘"
+
+"누가 가입하면 이메일 보내줘"
+
+이런 장난질이 가능한 것입니다. 
+
+그래서 예시로 알림기능을 만들어봅시다. 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+채팅방 개설시 참여자에게 알림메세지를 줍시다
+
+ 
+
+
+
+ 
+
+▲ 이렇게 뜨도록요
+
+이제 이런건 여러분이 알아서 할 수 있습니다. 알아서 잘 만들듯 
+
+뭐임 알림기능 안배웠는데 내가 어케함
+ 
+
+웹상에 있는 모든 기능들은 게시물 발행이라고 하지 않았습니까
+
+알림도 생긴거보면 실은 게시물이랑 똑같습니다. 
+
+1. 그래서 누가 채팅방 게시물 발행하면 
+
+2. 알림 게시물도 발행해주면 됩니다. 
+
+3. 근데 프론트엔드에서 하면 좀 그러니까 서버측에서 알림게시물을 발행해주면 됩니다. 
+
+ 
+
+ 
+
+[collapse]
+ 
+
+ 
+
+ 
+
+ 
+
+chatroom에 게시물 발행하면 알림게시물도 발행해주셈
+
+ 
+
+그리고 알림페이지를 만들어서 알림게시물을 HTML로 보여주는겁니다. 
+
+이러면 기능개발 끝이겠는데요. 
+
+근데 알림 게시물을 어디다가 저장할 지부터 생각하면 됩니다.
+
+저는 귀찮으니까 kim 유저의 알림은 user 컬렉션에 저장된 kim의 document에 추가해보도록 하겠습니다. 
+
+ 
+
+
+
+ 
+
+▲ 저렇게 하나의 필드로 추가할겁니다. 
+
+원래는 알림 게시물은 여러개 있을 수 있으니 document를 하나 새로 만들어야 좋겠지만 간결하게 보여드리기 위해 저렇게 할겁니다. 
+
+ 
+
+ 
+
+ 
+
+ 
+
+exports.createAlert = functions.region('asia-northeast3')
+.firestore.document('chatroom/{docid}').onCreate((snapshot, context)=>{
+
+  이때 실행할 코드~~
+
+}); 
+이거부터 쓰고 시작합시다.
+
+ 
+
+1. 이번 서버기능은 createAlert라고 작명했습니다. 
+
+2. functions.firestore.document(경로).onCreate() 라고 입력하면 어떤 Firestore DB 경로에 게시물이 생성될 때 뭔가 코드를 실행해줍니다.
+
+그냥 Functions 사용법에 나와있는 함수라 그대로 베껴쓰는 것일 뿐입니다. 
+
+ 
+
+여기서 파라미터 2개까지 작명이 가능한데 
+
+snapshot은 현재 올릴 게시물이 들어있고
+
+context는 현재 올릴 게시물의 DB 경로가 들어있습니다. 
+
+예를 들면 snapshot.data().who 이렇게 쓰면 현재 올릴 채팅방게시물에 저장된 who 필드가 출력되겠군요. ['uid1', 'uid2'] 이런게 나오지 않을까요. 
+
+필요할 때 가져다 씁시다. 
+
+ 
+
+ 
+
+ 
+
+ 
+
+exports.createAlert = functions.region('asia-northeast3')
+.firestore.document('chatroom/{docid}').onCreate((snapshot, context)=>{
+
+  db.collection('user').doc(who[0]).update({ alert : '어떤놈이 채팅검' })
+  db.collection('user').doc(who[1]).update({ alert : '어떤놈이 채팅검' })
+}); 
+그래서 chatroom안에 document 생성시
+
+그 참여자 두명의 user 컬렉션에 { alert : '어떤놈이 채팅검' } 항목을 추가하라고 했습니다. 
+
+성공적입니다. 
+
+ 
+
+하지만 db라는 변수가 없다고할걸요 db라는 변수 정의한 적이 없잖아요. 
+
+db.collection()을 쓰기 위해선 뭔가 설치가 필요합니다. 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+Admin SDK 설치하셔야합니다
+
+ 
+
+왜냐면 구글이 Firebase 만들 때
+
+Functions 담당 컴퓨터와 Firestore DB 담당 컴퓨터를 분리해서 만들어놨기 때문입니다.  
+
+Functions 컴퓨터에 관리자권한 같은걸 미리 설정해줘야 Firestore DB를 가져다 쓸 수 있습니다.
+
+Admin SDK 라는거 설치하면 되는데 설치방법은 
+
+ 
+
+ 
+
+1. Firebase console 들어가서 프로젝트 설정 - 서비스 계정 - Admin SDK 를 누릅니다
+
+ 
+
+2. functions 기능짜던 파일에 거기 뜨는 예제코드 복붙합니다. 
+
+ 
+
+3. JSON 파일을 다운받아서 functions 기능짜던 폴더에 집어넣습니다 (폴더명 아마 functions)
+
+ 
+
+4. 복붙한 예제코드안에
+
+var serviceAccount = require('다운받은 .json 파일 경로')
+경로를 바꿔줍니다. 
+
+ 
+
+5. 복붙한 예제코드안에
+
+const db = admin.firestore()
+이런 코드를 추가해줍니다. 밑에 추가하셈 
+
+ 
+
+6. 터미널을 오픈합니다.
+
+ 
+
+7. 터미널에서 cd functions라고 입력합니다. (functions라는 폴더로 터미널 경로를 바꾸는 작업임)
+
+ 
+
+8. 터미널에서 npm install firebase-admin 입력해서 뭐 설치합니다. 
+
+ 
+
+그럼 이제 복붙한 코드들 밑에서 db.collection() 이라는 문법 사용가능합니다. 
+
+나중에 Storage, Authentication 이런거 접근하고 싶을 때도 비슷합니다. 
+
+ 
+
+ 
+
+ 
+
+ 
+
+서버기능 만든거 테스트하려면 deploy 하십시오
+
+ 
+
+터미널에서 저번이랑 똑같이 
+
+firebase deploy --only functions 
+이거 입력하면 발행됩니다. 
+
+근데 항상 2~3분 걸립니다. 
+
+ 
+
+느려터진걸 기다리기 힘들다면 코드를 애초에 한방에 잘짜시든가 아니면 
+
+Firebase Emulator suite 이런거 설치하시면 됩니다.
+
+Firebase 서버를 가상으로 하나 만들어주기 때문에 그 안에서 여러가지 Functions 같은걸 빨리빨리 테스트 가능합니다. 
+
+(근데 매우 귀찮습니다)
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+아무튼 발행하고 채팅을 다시한번 걸어봤더니
+
+ 
+
+
+
+ 
+
+진짜로 kim과 Goguma 유저의 document에 항목이 하나 추가되었네요.
+
+이제 HTML로 이거 보여주면 끝이겠군요. 
+
+다른 서버기능들도 심심하면 하나 정해서 만들어보십시오. 

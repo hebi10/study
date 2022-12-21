@@ -1,0 +1,225 @@
+
+명령어 한 줄 5초컷이라 영상은 없습니다.
+
+ 
+
+ 
+
+ 
+
+1. 그냥 터미널에서 firebase serve 하던거 멈추시고
+
+(터미널에서 작업중지 명령어는 ctrl + c 입니다 맥은 command + c 겠죠)
+
+ 
+
+ 
+
+ 
+
+2. 발행할 프로젝트를 선택해야합니다. 
+
+firebase projects:list
+터미널에 위 명령어를 입력합니다. 그럼 내가 건드리고 있는 프로젝트들의 ID가 출력됩니다. 
+
+거기서 발행을 원하는 프로젝트의 ID를 잘 기억하신 뒤에
+
+ 
+
+ 
+
+firebase use 프로젝트ID 
+이렇게 명령어를 입력합니다.
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+▲ 스크린샷으로 보면 대충 이렇게 입력하면 됩니다 .
+
+저의 경우엔 applemarket 프로젝트를 선택했습니다.
+
+ 
+
+ 
+
+ 
+
+3. 발행하려면
+
+firebase deploy --only hosting
+위 명령어를 입력합니다. 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+▲ 그러면 발행됩니다.
+
+하단에 Hosting URL 뜨죠? 그게 님들 사이트 주소입니다. 누구나 들어갈 수 있습니다.
+
+드디어 웹서비스 출시한 것임 
+
+ 
+
+ 
+
+ 
+
+ 
+
+(에러가 나면)
+
+맨 처음 설치할 때 firebase init 하던거 기억나십니까.
+
+firebase init할 때 hosting 선택 안한 걸 수도 있습니다.
+
+그거 다시 입력해서 hosting도 선택해주시면 될듯요.
+
+(firebase init을 다시 하기 전에 그 폴더의 파일들을 전부 백업 해두는게 건강에 이롭습니다.)
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+▲ Firebase console 들어가시면 Hosting 메뉴에서
+
+여러가지 호스팅관련 설정이 가능합니다.
+
+도메인을 어디서 구매하셨으면 도메인 연결도 가능 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+(참고) Hosting 말고도 다른거 deploy도 가능합니다.
+
+ 
+
+
+
+ 
+
+▲ 프로젝트 보시면 firestore.rules 라는 파일이 있습니다.
+
+그게 firestore 접근 규칙 설정할 수 있는 파일인데
+
+firestore console에서 코딩하기 싫으시면 여기서 코딩하신 후 
+
+firebase deploy --only firestore 터미널에 입력하시면 저거 올라갑니다. 
+
+storage.rules도 비슷합니다. 
+
+ 
+
+ 
+
+ 
+
+사이트 버전관리 어떻게 하냐면
+ 
+
+님들이 기능을 업데이트했다고 칩시다. 
+
+그걸 바로 firebase deploy 해버리면 업데이트 끝입니다.  
+
+그런데 바로 올려버리면 생각지 못한 버그도 발생할 수 있고 약간 위험할 수 있습니다. 
+
+그래서 테스트용으로 올려보고 싶으시면 
+
+ 
+
+firebase hosting:channel:deploy version1 --expires 7d 
+터미널에 이런 명령어로 deploy 하시면 지금 라이브로 서비스되고 있는건 가만히 있고
+
+새로운 테스트용 사이트를 배포해줍니다. 
+
+이 사이트를 전문용어로 Preview channel 이라고 합니다. 
+
+ 
+
+deploy 우측에 버전명을 작명가능한데 저는 version1이라고 작명했는데 님들은 맘대로 하셈 
+
+expires 7d 이거는 7일 후에 사이트 자동으로 지우라는 뜻입니다. 
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+▲ 그러면 이렇게 새로운 URL을 알려줍니다.
+
+님들 사이트 테스트버전이라고 생각하면 됩니다. 
+
+여기서 새로운 기능들 잘 되나 테스트해보고 실제 deploy 해주시면 됩니다. 
+
+URL 까먹으면 Firebase console 들어가면 알려줌 
+
+ 
+
+ 
+
+ 
+
+ 
+
+Preview channel을 Live channel로 복사하려면
+
+그니까 실제 발행되어서 유저에게 보여지는 사이트를 Live channel이라고 하는데 
+
+Preview channel 만든게 잘 작동해서 Live로 옮겨버리고 싶다면 
+
+firebase hosting:clone 프로젝트ID:버전명 프로젝트ID:live  
+터미널에 이런 명령어 입력하면 됩니다.
+
+프로젝트 ID는 위에서 찾았었고 
+
+버전명은 아까 저는 version1로 작명한 그겁니다.
+
+저의 경우에는 이렇게 입력하면 되겠군요
+
+firebase hosting:clone applemarket-83cc9:version1 applemarket-83cc9:live 
+ 
+
+근데 변동사항 없으면 그냥 firebase deploy 맨 첨에 했던거 그대로 하셔도 똑같을듯 
+
+아니면 그냥 이딴거보다 테스트용 프로젝트를 하나 더 만드십시오
+
+거기다가 막 개발하고 괜찮다 싶으면 실제 프로젝트로 코드를 옮겨오는 겁니다. 
+
+마치 게임 테스트서버처럼 진행해도 무리없을 듯요 

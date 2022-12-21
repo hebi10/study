@@ -1,0 +1,213 @@
+
+오늘의 숙제 : 
+
+DB에서 메세지들을 가져와서 HTML로 보여주려면 코드 어떻게 짜야할까요?
+
+채팅방 박스를 누르면 그 채팅방에 있던 메세지들을 가져와보도록 합시다. 
+
+ 
+
+ 
+
+ 
+
+메세지 보내는 기능을 만들 것인데
+
+메세지도 일종의 게시물처럼 DB에 저장하면 끝입니다.
+
+근데 대체 어디에 저장할 것인지 고민해보셔야합니다. 
+
+ 
+
+ 
+
+
+▲ 이런 위치에 저장할 것입니까 
+
+그러면 메세지가 100만개면 어쩔 것입니까
+
+who, product 이런 필드랑 섞여서 나중에 매우 찾기 힘들 것 같습니다. 
+
+그래서 폴더를 하나 만들어서 거기 전부 밀어넣으셈 
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+▲ 폴더 어떻게 만드냐고요? 폴더가 컬렉션이라고 하지 않았습니까.
+
+그래서 채팅방 document 안에 새로운 컬렉션을 만드시고 거기에 메세지들을 집어넣으면 됩니다.
+
+컬렉션 이름은 messages 라고 합시다. 
+
+
+그래서 메세지들이 어딨는지 그림으로 표현하자면 
+
+
+(작은 하늘색 박스가 메세지들입니다.)
+
+서브컬렉션에 게시물 발행하려면
+
+ 
+
+예를 들어서 chatroom 안의 고구마 채팅방 안의 messages 컬렉션에 발행하고 싶으면
+
+db.collection('chatroom').doc('고구마채팅방id').collection('messages').add(게시물~~)
+넘나 직관적이고 쉽습니다.
+
+ 
+
+고구마 채팅방 id 알아서 찾아서 넣어해주면 될듯요
+
+ 
+
+ 
+
+그래서 전송 버튼을 누르면 사용자가 입력한 글자로 게시물을 발행해봅시다.
+
+게시물 안엔 발행자의 uid, date, 메세지내용만 들어가있으면 될듯요
+
+이 정도는 이제 알아서 해야됩니다 누르지 마셈
+ 
+
+ 
+
+$('#send').click(function(){
+  var 데이터 = {
+    content : $('#chat-input').val(),
+    date : new Date(),
+    uid : 내uid
+  }
+
+  db.collection('chatroom').doc('고구마채팅방id').collection('messages').add(데이터)
+
+})
+ 
+
+여기서 님들이 메세지 보낼 고구마채팅방 id 같은것만 DB에서 찾아서 잘 채워주면 되겠죠? 
+
+ 
+
+ 
+
+[collapse]
+ 
+
+ 
+
+그리고 당연히 messages 컬렉션 안의 문서 접근 규칙도 알아서 설정해주셔야합니다.
+
+match /chatroom/{docid}/messages/{docid2} {
+  allow read, write : if true;
+}
+Firestore 규칙란에 설정해줍시다.
+
+그럼 이제 메세지 적고 전송버튼 누르면 messages 컬렉션 안에 게시물이 생성됩니다.
+
+성공 
+
+왜 고구마 채팅방에만 저장됩니까 
+
+db.collection('chatroom').doc('고구마채팅방id').collection('messages').add(데이터)
+아까 고구마 채팅방 document id를 강제로 기입했으니까요. 코드를 그렇게 짠 것일 뿐임
+
+이제 님들이 사이트 왼쪽에 있는 채팅방 박스 <li> 이걸 누르면
+
+채팅방 id가 동적으로 바뀌도록 코드짜면 됩니다.
+
+Q. 뭘누르면 뭐가 바뀌어야한다고요? 
+
+저거 <li> 어쩌구 HTML 누르면 안에 있는 채팅방 id 가져와서
+
+.doc('고구마채팅방id') 여기다가 집어넣으라는 것입니다. 
+
+그러면 각각 다른 채팅방에 메세지 저장이 가능하겠네요. 
+
+ 
+
+저는 어떻게 짰냐면
+ 
+
+ 
+
+db.collection('chatroom').where('who', 'array-contains', 내uid).get().then((result)=>{
+  result.forEach((a)=>{
+    var template = `<li class="list-group-item">
+            <h6>${a.data().product}</h6>
+            <h6 class="text-small">${a.id}</h6>
+          </li>`
+    $('.chat-list').append(template)
+
+    //저거 박스 누르면 채팅방 id 가져오는 코드
+    $('.list-group-item').click(function(){
+      var 채팅방id = $(this).children('.text-small').text()
+    });
+  })
+})
+ 
+
+3줄을 추가했는데
+
+1. 저거 박스누르면
+
+2. 거기 안에 숨어있던 글자 가져오라고 했습니다.
+
+3. 그거 채팅방id라는 변수에 저장해놓음
+
+자바스크립트 시간이 아니니 2번 설명은 생략합니다.
+
+근데 이걸 아까 그곳에 어떻게 집어넣죠? 
+
+자바스크립트 특징인데
+
+function 또는 ()=>{} 안에서 만든 변수는 함수 바깥으로 나가면 사용 불가능합니다.
+
+근데 반대로 function 또는 ()=>{} 바깥에서 만든 변수는 function 또는 ()=>{} 안에서 사용가능합니다.
+
+그래서 변수를 바깥에 만드시면 될듯요 
+
+db.collection('chatroom').where('who', 'array-contains', 내uid).get().then((result)=>{
+  result.forEach((a)=>{
+    var template = `<li class="list-group-item">
+            <h6>${a.data().product}</h6>
+            <h6 class="text-small">${a.id}</h6>
+          </li>`
+    $('.chat-list').append(template)
+
+    //저거 박스 누르면 채팅방 id 가져오는 코드
+    $('.list-group-item').click(function(){
+      채팅방id = $(this).children('.text-small').text()
+    });
+  })
+})
+
+var 채팅방id;
+
+
+$('#send').click(function(){
+  var 데이터 = {
+    content : $('#chat-input').val(),
+    date : new Date(),
+    uid : 내uid
+  }
+
+  db.collection('chatroom').doc(채팅방id).collection('messages').add(데이터)
+
+})
+ 
+
+그래서 코드를 이렇게 짰다고 합니다. 
+
+[collapse]
+ 
+오늘의 숙제 : 
+
+DB에서 메세지들을 가져와서 HTML로 보여주려면 코드 어떻게 짜야할까요?
+
+채팅방 박스를 누르면 그 채팅방에 있던 메세지들을 가져와보도록 합시다. 

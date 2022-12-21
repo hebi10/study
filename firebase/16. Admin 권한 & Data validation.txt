@@ -1,0 +1,203 @@
+
+사이트 운영하다보면 관리자 역할 유저가 필요합니다. 
+
+그래서 모든 유저의 게시물을 수정가능한 유저를 예시로 하나 만들어봅시다. 
+
+ 
+
+ 
+
+저는 일단 관리자를 kim으로 결정했습니다.
+
+ 
+
+
+
+ 
+
+▲ kim 이라는 유저의 role을 'admin' 으로 집어넣어서 이 유저는 특이한 유저라고 구분지어놨습니다.
+
+이제 수정버튼 누르면 role : 'admin' 인 유저는 수정가능하게 만들어주면 그게 관리자기능 끝인듯요  
+
+수정가능여부는 Firestore 규칙란에 잘 정의해놨으니까 그거 고치면 되겠네요. 
+
+ 
+
+ 
+
+ 
+
+ 
+
+Firestore OR 규칙
+
+ 
+
+match /product/{docid} {
+  allow read : if true;
+  allow create : if request.auth != null;
+  allow update : if request.auth.uid == resource.data.uid 
+  || 지금요청하는유저의role == 'admin';
+}
+ 
+
+ 
+
+update를 이거 OR 저거일 경우 가능하게 만들고 싶으면
+
+|| 기호를 쓰면 됩니다. 이게 or 기호임 
+
+근데 지금 요청하는 유저의 role이 어디 숨어있냐면 request.auth 이런데 숨어있는게 아니라
+
+user 라는 컬렉션에 숨어있습니다.
+
+그래서 규칙 작성 중에 갑자기 다른 컬렉션에 있는 document를 가져오고 싶으면 
+
+get(경로) 이걸 쓰면 찾아올 수 있습니다.
+
+ 
+
+ 
+
+match /product/{docid} {
+  allow read : if true;
+  allow create : if request.auth != null;
+  allow update : if request.auth.uid == resource.data.uid 
+  || get(/databases/$(database)/documents/user/$(request.auth.uid)).data.role == 'admin';
+}
+▲ 그래서 지금 수정요청하는 유저의 user 컬렉션을 뒤지라고 명령을 줬다고 합니다.
+
+$() 문법은 경로 중간에 변수를 집어넣고싶을 때 쓰는 문법입니다. 
+
+그리고 get() 뒤에다가 .data하면 그 document 안에 있던 데이터가 전부 object 형식으로 나오고 
+
+그럼 .role 하면 거기 저장된 role : 어쩌구를 출력할 수 있겠네요. 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+규칙란에 함수 사용가능
+
+ 
+
+function 어쩌구(){
+  return 축약할긴코드
+}
+이렇게 코드 아무데나 짜두시면
+
+ 
+
+어쩌구() 라고 쓸 때마다 return 오른쪽에 있던 긴 코드~~가 그 자리에 남습니다.
+
+그냥 함수문법이랑 똑같음 
+
+특정 코드가 너무 길거나 자주 등장하면 함수로 만들어두기 좋겠군요.
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+Data Validation : 유저가 이상한 필드를 집어넣으면
+
+ 
+
+그니까 게시물올릴 때 유저가 자바스크립트 잘하면 데이터로 이상한 필드도 집어넣을 수 있습니다. 
+
+{ 제목 : '고구마', 메롱 : '바보'  }
+
+이런 게시물을 넣을 수 있다니깐요 
+
+그걸 막고싶으면 규칙란에 이렇게 작성하라고 합니다.
+
+ 
+
+ 
+
+match /product/{docid} {
+  allow read : if true;
+  allow create : if request.auth != null
+  && request.resource.data.keys().hasOnly(['제목', '내용', '가격']);
+
+  allow update : if request.auth.uid == resource.data.uid 
+  || get(/databases/$(database)/documents/user/$(request.auth.uid)).data.role == 'admin';
+}
+▲ && 이건 and를 뜻하는 문법이고 
+
+request.resource.data 이건 지금 유저가 저장할 게시물을 의미합니다.
+
+keys().hasOnly(['제목', '내용', '가격']) 이걸 붙이면 이 데이터에 있는 필드값을 검사할 수 있습니다.
+
+위 코드는 제목, 내용, 가격이 포함되어있을 때만 참으로 판정해줍니다. 
+
+알아서 더 채워넣으면 됩니다. 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+Data Validation : 유저가 빈칸을 넣으면 
+
+ 
+
+유저가 빈칸을 넣거나 문자가 아닌걸 넣는 것도 방지할 수 있습니다.
+
+ 
+
+match /product/{docid} {
+  allow read : if true;
+  allow create : if request.auth != null
+  && request.resource.data.keys().hasOnly(['제목', '내용', '가격'])
+  && request.resource.data.제목.size() > 0
+  && request.resource.data.제목 is string
+
+  allow update : if request.auth.uid == resource.data.uid 
+  || get(/databases/$(database)/documents/user/$(request.auth.uid)).data.role == 'admin';
+}
+request.resource.data.제목.size() 이건 제목필드에 입력한 글자수를 뜻합니다.
+
+request.resource.data.제목 is string 이건 제목필드에 입력한게 글자인지 검사해줍니다.
+
+이런 식으로 쭉 작성해나가면 됩니다.
+
+그래서 입력할게 많을 수록 코드가 매우 깁니다.
+
+ 
+
+(주의) 필드값 이름은 한글로 적으시면 안됩니다.
+
+왜냐면 Firestore 규칙란에는 한글을 못적기 때문에 그렇습니다.
+
+Firestore 데이터들에 있는 필드값들 (제목, 가격 이런거) 영어로 바꿔주셈 
+
+프로젝트에 있는 소스코드도 마찬가지임 
+
+ 
+
+그리고 당연히 이미지 업로드에 사용하는 Storage 규칙도 지정해주는게 어떨까요.
