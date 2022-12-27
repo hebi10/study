@@ -1,0 +1,63 @@
+1. 회원가입 
+
+
+$('#register').click(function(){
+  
+  var 이메일 = $('#email-new').val();
+  var 패스워드 = $('#pw-new').val();
+  var 이름 = $('#name-new').val();
+
+  firebase.auth().createUserWithEmailAndPassword(이메일, 패스워드).then((result)=>{
+    console.log(result.user) - 유저 정보 보기
+    result.user.updateProfile( {displayName : 이름} ) - 유저 정보 추가 저장
+  })
+})
+
+jQuery 셀렉터로 요소를 찾고 .val() 이라고 입력하면 인풋에 입력한 값을 알 수 있습니다.
+그 다음에 성공시 뭔가 코드를 실행하고 싶으면 항상 .then() 이런거 쓰면 됩니다.
+그리고 거기에 파라미터를 하나 추가하면 그것은 유저정보가 담겨올 것임 
+
+- 유저정보를 출력해보면 { uid : F6VImsrwdvMLOV4Swfr }가 나옴
+
+
+2) react
+
+let email = newUser.emailNew;
+let password = newUser.pwNew;
+
+firebase
+  .auth()
+  .createUserWithEmailAndPassword(email, password)
+  .then((result) => {
+    let today = new Date();
+    console.log(result);
+    result.user.updateProfile({ displayName: newUser.nameNew });
+    db.collection("user")
+      .doc(newUser.nameNew)
+      .set({
+        description: newUser.description,
+        userName: newUser.nameNew,
+        uid: result.user.uid,
+        date: `${today.getFullYear()}.${
+          today.getMonth() + 1
+        }.${today.getDate()}`,
+      });
+
+
+2. 로그인
+
+$('#login').click(function(){
+  
+  var 이메일 = $('#email').val();
+  var 패스워드 = $('#pw').val();
+
+  firebase.auth().signInWithEmailAndPassword(이메일, 패스워드).then((result)=>{
+    console.log(result.user)
+  })
+})
+
+3. 로그아웃
+
+$('#logout').click(function(){
+  firebase.auth().signOut()
+})

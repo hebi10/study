@@ -1,0 +1,34 @@
+1. 읽기
+
+  const db = firebase.firestore();
+  db.collection('product').get().then((결과)=>{
+    결과.forEach((doc)=>{
+      console.log(doc.data());
+    })
+  })
+
+Firebase ~~~ missing permission error(에러) 
+- Database 규칙 설정 안해서 생기는 버그
+
+1) db.collection('~~~').get() - 폴더 안 모든 문서들의 글을 [.get()]을 사용하여 가져옴 [forEach] 필수
+2) db.collection('~~~').doc().get() - 해당 문서의 글을 [.get()]을 사용하여 가져옴
+3) .data() - 필수
+
+db.collection("product")
+  .doc("0gjOA1UXDOr8W4kRbWvn")
+  .get()
+  .then((result) => {
+    console.log(result.data());
+  });
+
+2. 쓰기(저장)
+
+const db = firebase.firestore();
+db.collection('product').doc('상품3').set({ 제목 : '변기' })
+
+- 문서의 이름[.doc('상품3')]을 지정 하고 그 안에 데이터 저장
+- 지정한 이름이 없으면 생성 있으면 그 안에 작성
+
+db.collection('product').add({})
+
+- 랜덤 문서 명 생성 후 저장
