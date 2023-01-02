@@ -1,0 +1,59 @@
+this와 jQuery
+
+ES6에서는 function 대신 화살표 함수(=>)를 사용합니다. 
+영어로 Fat Arrow(뚱뚱한 화살)라고 부르는 표기법은 
+단순히 function을 바꾼 것으로 알고 있는 분들이 계시지만 실제론 그렇지 않습니다.
+
+$('#element1').click(function(){
+  console.log(this);
+});
+
+$('#element2').click(() => {
+  console.log(this);
+});
+
+위의 예시는 두 차이를 극명하게 보여줍니다. 
+
+1. #element1의 this : element1 
+2. #element2의 this : global 
+
+이유는 화살표 함수에서의 this와 function에서의 this가 다르기 때문입니다. 
+화살표 함수 안의 this는 함수 밖의 this와 같은 값을 가집니다. 
+그렇기 때문에 element2와 같이 코딩을 하는 경우 함수 밖의 영향을 받아 this가 매번 변화할 수 있습니다.
+
+그러면 어떻게 기존 jQuery 코드를 화살표 함수 형태로 변경할 수 있을까요? 
+
+$('#element1').click(function(){
+  console.log(this);
+});
+
+$('#element2').click((e) => {
+  console.log(e.target);
+});
+
+위와 같이 화살표 함수 내에 매개변수를 넣어 선택된 엘리먼트를 지정해줍니다. 
+이렇게 하면 위에서와 동일한 작동합니다. 
+
+위의 코드를 작동시켜보면 선택된 엘리먼트 뿐 아니라 자녀 엘리먼트에게도 영향을 줍니다. 
+부모 엘리먼트인 element1 하위의 모든 엘리먼트에 영향을 주게 되는데 element1에만 영향을 주고 싶다면 아래와 같이 하면 됩니다.
+
+$('#element2').click((e) => {
+  $(e.currentTarget).addClass("cheked");
+});
+
+위의 코드를 해석하면 element1이 포함하는 모든 구역에서 클릭이 될 때 element1에만 'clicked' 클래스가 추가됩니다. 자녀 엘리먼트는 영향을 받지 않습니다.
+
+조금 더 나아가서 엘리먼트 하위의 특정 자녀들에게만 이벤트를 부여하는건 어떻게 할 수 있을까요? 
+
+<ul id='my-list'>
+  <li class="list">하나</li>
+  <li class="list">둘</li>
+  <li class="list">셋</li>
+</ul>
+
+$('#element2').on("click", "li", (e) => {
+  $(e.currentTarget).addClass("cheked");
+});
+
+이렇게 #my-list에 대해서 이벤트를 하나 부여하여 모든 <li> 태그에 대해서 동일한 이벤트를 부여할 수 있습니다. 
+위의 코딩 스타일은 각각의 li에 이벤트를 부여하는 것보다 자원을 아낄 수 있을 뿐 아니라 유지보수에도 도움을 줍니다.
