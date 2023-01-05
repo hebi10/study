@@ -7,7 +7,7 @@ function useInput(initialValue) {
     setInputValue(e.target.value);
   };
 
-  return [inputValue, handleChange, click];
+  return [inputValue, handleChange];
 }
 
 export default useInput;
