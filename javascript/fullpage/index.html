@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      ::-webkit-scrollbar {
+        display: none;
+      }
+
+      .full {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 30px;
+      }
+
+      .colorRed {
+        background-color: lightcoral;
+      }
+
+      .colorBlue {
+        background-color: lightblue;
+      }
+
+      .colorGreen {
+        background-color: lightgreen;
+      }
+
+      .colorPink {
+        background-color: lightpink;
+      }
+
+      body > ol {
+        position: fixed;
+        right: 1vw;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      body > ol li {
+        width: 20px;
+        height: 20px;
+        background-color: white;
+        border-radius: 100%;
+      }
+
+      body > ol li:not(:nth-last-child(1)) {
+        margin-bottom: 10px;
+      }
+
+      body > ol li.active {
+        background-color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header data-scroll="fullpage" class="full colorGreen">header</header>
+      <section data-scroll="fullpage" class="full colorBlue">section01</section>
+      <section data-scroll="fullpage" class="full colorRed">section02</section>
+      <footer data-scroll="fullpage" class="full colorPink">footer</footer>
+    </div>
+    <ol></ol>
+
+    <script>
+      const fullPage = document.querySelectorAll("[data-scroll]");
+      const fullPageLength = document.querySelectorAll("[data-scroll]").length;
+      let pageOl = document.querySelector("body > ol");
+      let targetScrollTop = [];
+      let pageAct = 0;
+
+      for (let i = 0; i < fullPageLength; i++) {
+        let li = document.createElement("li");
+        pageOl.append(li);
+        targetScrollTop.push(fullPage[i].offsetTop);
+      }
+
+      const pageList = document.querySelectorAll("body > ol li");
+
+      for (let i = 0; i < fullPageLength; i++) {
+        pageList[i].addEventListener("click", () => {
+          for (let j = 0; j < fullPageLength; j++) {
+            pageList[j].classList.remove("active");
+          }
+          pageList[i].classList.add("active");
+          pageAct = i;
+          window.scrollTo({
+            top: targetScrollTop[i],
+            left: 0,
+            behavior: "smooth",
+          });
+        });
+      }
+
+      document
+        .querySelector("body > ol li:nth-child(1)")
+        .classList.add("active");
+
+      fullPage.forEach((elem) => {
+        elem.addEventListener("wheel", (e) => {
+          e.preventDefault();
+          if (!targetScrollTop.includes(window.pageYOffset)) {
+            return;
+          }
+
+          for (let j = 0; j < fullPageLength; j++) {
+            pageList[j].classList.remove("active");
+          }
+
+          let delta = e.deltaY;
+          let prev = elem.previousElementSibling;
+          let next = elem.nextElementSibling;
+          if (delta < 0) {
+            // 위로
+            if (prev?.dataset.scroll == "fullpage") {
+              window.scrollTo({
+                top: prev.offsetTop,
+                left: 0,
+                behavior: "smooth",
+              });
+              pageAct--;
+              pageOl.childNodes[pageAct].classList.add("active");
+            }
+          } else {
+            // 아래로
+            if (next?.dataset.scroll == "fullpage") {
+              window.scrollTo({
+                top: next.offsetTop,
+                left: 0,
+                behavior: "smooth",
+              });
+            }
+            pageAct--;
+            pageOl.childNodes[pageAct].classList.add("active");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
